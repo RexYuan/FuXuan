@@ -9,12 +9,12 @@ headers = {'X-Auth-Email': secret.CF['email'],
            'Content-Type': 'application/json'}
 
 params = {'type':    'A',
-          'name':    'nuc.rexy.xyz',
+          'name':    'den.rexy.xyz',
           'content': ip}
 
 slugs = {'endpoint': 'https://api.cloudflare.com/client/v4',
-         'zone_id':  secret.NUC['zone_id'],
-         'id':       secret.NUC['id']}
+         'zone_id':  secret.HOME['zone_id'],
+         'id':       secret.HOME['id']}
 url = '{endpoint}/zones/{zone_id}/dns_records/{id}'.format(**slugs)
 
 r = requests.put(url, headers=headers, json=params)
