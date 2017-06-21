@@ -12,8 +12,6 @@ alias sml="rlwrap sml"
 alias ocaml="rlwrap ocaml"
 alias python=python3
 alias pip=pip3
-alias "chrome ls"="chrome-cli list tabs"
-alias "composer ls"="composer global show"
 alias dl="youtube-dl --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4"
 alias dl-audio="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0"
 alias zshrc="nano /Users/Rex/.zshrc.local"
