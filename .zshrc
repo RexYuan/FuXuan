@@ -1,3 +1,5 @@
+# run for interactive shells
+
 # settings
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -10,8 +12,6 @@ export PATH=/Users/Rex/.composer/vendor/bin:$PATH
 # handy aliases
 alias sml="rlwrap sml"
 alias ocaml="rlwrap ocaml"
-alias python=python3
-alias pip=pip3
 alias dl="youtube-dl --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4"
 alias dl-audio="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0"
 alias zshrc="nano /Users/Rex/.zshrc.local"
