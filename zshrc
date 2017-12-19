@@ -18,6 +18,7 @@ alias zshrc="nano /Users/Rex/.zshrc.local"
 alias zshenv="nano /Users/Rex/.zshenv.local"
 alias sip="python /Users/Rex/RexYuan.github.io/_pensieve/siphon.py"
 alias dep="python /Users/Rex/Ellary-examples/vocab/deposit.py"
+alias tf="source ~/tensorflow/bin/activate"
 
 # update helper
 mas="echo \"-----🍎 -app-store---------------------------------------------------------------\" && mas upgrade &&"
