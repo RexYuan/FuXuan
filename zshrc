@@ -46,7 +46,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen apply
 
 # pure theme
-PURE_PROMPT_SYMBOL="🤖  ❯"
+PURE_PROMPT_SYMBOL="🍵  ❯"
 autoload -U promptinit; promptinit
 prompt pure
 
