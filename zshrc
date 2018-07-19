@@ -1,5 +1,8 @@
 # run for interactive shells
 
+# learn shell script and make this a function ok?
+alias to-mp3="echo 'ffmpeg -i input.fmt -vn -ar 44100 -ac 2 -b:a 192k -f mp3 output.mp3'"
+
 # settings
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -20,6 +23,7 @@ alias sip="python /Users/Rex/RexYuan.github.io/_pensieve/siphon.py"
 alias dep="python /Users/Rex/Ellary-examples/vocab/deposit.py"
 alias tf="source ~/tensorflow/bin/activate"
 alias texmf="cd /usr/local/texlive/texmf-local/tex/latex/local"
+alias texmf-bibtex="cd /usr/local/texlive/texmf-local/bibtex/bst/local"
 
 # update helper
 mas="echo \"-----🍎 -app-store---------------------------------------------------------------\" && mas upgrade &&"
