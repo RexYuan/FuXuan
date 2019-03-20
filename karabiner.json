@@ -11,7 +11,7 @@
                         "key_code": "caps_lock",
                         "modifiers": {
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
@@ -68,7 +68,7 @@
                                 "left_control"
                             ],
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
@@ -97,7 +97,7 @@
                                 "left_control"
                             ],
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
@@ -121,13 +121,43 @@
                                 "left_control"
                             ],
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
                     "to": [
                         {
                             "key_code": "t",
+                            "modifiers": [
+                                "left_control",
+                                "left_option",
+                                "left_command"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "comment": "for panel switching in split view",
+            "description": "left_command + caps_lock => left_control + left_option + left_command + Q",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "caps_lock",
+                        "modifiers": {
+                            "mandatory": [
+                                "left_command"
+                            ],
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "q",
                             "modifiers": [
                                 "left_control",
                                 "left_option",
