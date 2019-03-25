@@ -1,5 +1,5 @@
 {
-    "comment": "ln -s ~/Poppy/karabiner.json  /Users/Rex/.config/karabiner/assets/complex_modifications/",
+    "comment": "ln -s $POPPY/karabiner.json ~/.config/karabiner/assets/complex_modifications/",
     "title": "Rex's Karabiner Rules",
     "rules": [
         {

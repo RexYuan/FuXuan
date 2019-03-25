@@ -1,5 +1,5 @@
 # run for all shells
 
-# aliases
+# use python3 as default
 alias python=python3
 alias pip=pip3

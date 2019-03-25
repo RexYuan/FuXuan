@@ -1,29 +1,47 @@
-# run for interactive shells
 
-# learn shell script and make this a function ok?
-alias to-mp3="echo 'ffmpeg -i input.fmt -vn -ar 44100 -ac 2 -b:a 192k -f mp3 output.mp3'"
+# run for interactive shells
+# ln -s $POPPY/zshrc ~/.zshrc.local
 
 # settings
+export POPPY=/Users/Rex/Projects/Poppy
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export EDITOR='nano'
 export COWPATH="/Users/Rex/.cow"
-export PATH=$(brew --prefix llvm)/bin:$PATH
-export PATH="$(brew --prefix homebrew/php/php71)/bin:$PATH"
-export PATH=/Users/Rex/.composer/vendor/bin:$PATH
 
 # handy aliases
 alias sml="rlwrap sml"
 alias ocaml="rlwrap ocaml"
-alias dl="youtube-dl --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4"
-alias dl-audio="youtube-dl --extract-audio --audio-format mp3 --audio-quality 0"
 alias zshrc="nano /Users/Rex/.zshrc.local"
 alias zshenv="nano /Users/Rex/.zshenv.local"
 alias sip="python /Users/Rex/RexYuan.github.io/_pensieve/siphon.py"
 alias dep="python /Users/Rex/Ellary-examples/vocab/deposit.py"
-alias tf="source ~/tensorflow/bin/activate"
+
+# latex shortcuts
 alias texmf="cd /usr/local/texlive/texmf-local/tex/latex/local"
 alias texmf-bibtex="cd /usr/local/texlive/texmf-local/bibtex/bst/local"
+
+# youtube-dl shortcuts
+alias ytdl=youtube-dl
+alias dl="ytdl --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4"
+alias dl-audio="ytdl --extract-audio --audio-format mp3 --audio-quality 0"
+# run quietly in background
+function qdl() { youtube-dl -f 'bestvideo/best' --quiet $1 & }
+
+# convert to mp3
+alias to-mp3="ffmpeg -vn -ar 44100 -ac 2 -b:a 192k -f mp3 out.mp3 -i"
+# make mp4 from audio and image
+function mp3vid() { ffmpeg -loop 1 -i $1 -i $2 -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest out.mp4 }
+
+# convert from big5 to utf8
+function big5utf8() { file $1 | grep -Fq "ISO-8859" && iconv -f BIG5 -t UTF-8 $1 > $1.temp && mv $1.temp $1 }
+# convert everything under $1 with extension $2
+function allbig5utf8() {
+    for file in $1/**/*(.)$2
+    do
+        big5utf8 $file
+    done
+}
 
 # update helper
 mas="echo \"-----🍎 -app-store---------------------------------------------------------------\" && mas upgrade &&"
