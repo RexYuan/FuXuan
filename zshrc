@@ -26,8 +26,8 @@ alias ytdl=youtube-dl
 alias dl="ytdl --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4"
 alias dl-audio="ytdl --extract-audio --audio-format mp3 --audio-quality 0"
 # run quietly in background
-function qdl() { dl --quiet $1 & }
-function pdl() { ytdl -f 'bestvideo/best' --quiet $1 & }
+function qdl() { {dl --quiet $1 || echo '❌ this failed: ' $1} & }
+function pdl() { {ytdl -f 'bestvideo/best' --quiet $1 || '❌ this failed: ' $1} & }
 
 # convert to mp3
 alias to-mp3="ffmpeg -vn -ar 44100 -ac 2 -b:a 192k -f mp3 out.mp3 -i"
