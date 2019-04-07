@@ -56,14 +56,15 @@
                             ]
                         }
                     },
-                    "to": [
+                    "to_after_key_up": [
                         {
                             "key_code": "fn"
                         }
                     ],
                     "to_if_held_down": [
                         {
-                            "key_code": "caps_lock"
+                            "key_code": "caps_lock",
+                            "halt": true
                         }
                     ]
                 }
@@ -183,6 +184,109 @@
                                 "left_control",
                                 "left_option",
                                 "left_command"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "k => spacebar and j/l => change input to english when vlc is frontmost",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "k",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "spacebar"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^org\\.videolan\\.vlc$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "j",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "select_input_source": {
+                                "input_source_id": "^com\\.apple\\.keylayout\\.US$"
+                            }
+                        },
+                        {
+                            "key_code": "j"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^org\\.videolan\\.vlc$"
+                            ]
+                        },
+                        {
+                            "type": "input_source_if",
+                            "input_sources": [
+                                {
+                                    "input_source_id": "^com\\.apple\\.inputmethod\\.TCIM\\.Zhuyin$"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "l",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "select_input_source": {
+                                "input_source_id": "^com\\.apple\\.keylayout\\.US$"
+                            }
+                        },
+                        {
+                            "key_code": "l"
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^org\\.videolan\\.vlc$"
+                            ]
+                        },
+                        {
+                            "type": "input_source_if",
+                            "input_sources": [
+                                {
+                                    "input_source_id": "^com\\.apple\\.inputmethod\\.TCIM\\.Zhuyin$"
+                                }
                             ]
                         }
                     ]
