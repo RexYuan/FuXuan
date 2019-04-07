@@ -191,7 +191,7 @@
             ]
         },
         {
-            "description": "k => spacebar and j/l => change input to english when vlc is frontmost",
+            "description": "k => spacebar and j/l => right_command + right_option + left_arrow/right_arrow when vlc is frontmost",
             "manipulators": [
                 {
                     "type": "basic",
@@ -229,12 +229,11 @@
                     },
                     "to": [
                         {
-                            "select_input_source": {
-                                "input_source_id": "^com\\.apple\\.keylayout\\.US$"
-                            }
-                        },
-                        {
-                            "key_code": "j"
+                            "key_code": "left_arrow",
+                            "modifiers": [
+                                "right_command",
+                                "right_option"
+                            ]
                         }
                     ],
                     "conditions": [
@@ -242,14 +241,6 @@
                             "type": "frontmost_application_if",
                             "bundle_identifiers": [
                                 "^org\\.videolan\\.vlc$"
-                            ]
-                        },
-                        {
-                            "type": "input_source_if",
-                            "input_sources": [
-                                {
-                                    "input_source_id": "^com\\.apple\\.inputmethod\\.TCIM\\.Zhuyin$"
-                                }
                             ]
                         }
                     ]
@@ -266,12 +257,11 @@
                     },
                     "to": [
                         {
-                            "select_input_source": {
-                                "input_source_id": "^com\\.apple\\.keylayout\\.US$"
-                            }
-                        },
-                        {
-                            "key_code": "l"
+                            "key_code": "right_arrow",
+                            "modifiers": [
+                                "right_command",
+                                "right_option"
+                            ]
                         }
                     ],
                     "conditions": [
@@ -279,14 +269,6 @@
                             "type": "frontmost_application_if",
                             "bundle_identifiers": [
                                 "^org\\.videolan\\.vlc$"
-                            ]
-                        },
-                        {
-                            "type": "input_source_if",
-                            "input_sources": [
-                                {
-                                    "input_source_id": "^com\\.apple\\.inputmethod\\.TCIM\\.Zhuyin$"
-                                }
                             ]
                         }
                     ]
