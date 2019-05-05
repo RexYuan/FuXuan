@@ -63,9 +63,9 @@ pdf_gutter () {
     # abort if file already exists
     [[ -e $output ]] && {echo "$output already exists" >&2; return 1}
 
-    local offset_point=$(expr $margin_size \* $cm_in_point)
+    local offset_point=$(($margin_size * $cm_in_point))
     # widen the page for scaling down
-    [[ $scale = true ]] && local width_point=$(expr 595 + $offset_point)\
+    [[ $scale = true ]] && local width_point=$((595 + $offset_point))\
                         || local width_point=595
     # if scaling, only add offset to one of even/odd pages
     local odd_pages=""
@@ -87,11 +87,10 @@ pdf_gutter () {
             local odd_pages="-$offset_point 0 translate"
         fi
     fi
-    local resize="0.9550 1 scale" # TODO: figure out a way to properly resize
-                                  # back to original text size
-                                  # problem is it scale in reference to lower
-                                  # left corner so pages shifted right need to
-                                  # be moved right some more after scale
+    # local resize="0.9550 1 scale"
+    # TODO: figure out a way to properly resize back to original text size
+    # problem is it scale in reference to lower left corner so pages shifted
+    # right need to be moved right some more after scale
     local resize=""
     # assemble command
     local post_script_command="\"<< /CurrPageNum 1 def\
