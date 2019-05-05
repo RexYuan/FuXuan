@@ -63,7 +63,9 @@ pdf_gutter () {
     # abort if file already exists
     [[ -e $output ]] && {echo "$output already exists" >&2; return 1}
 
-    local offset_point=$(($margin_size * $cm_in_point))
+    # calculate offset with six place decimal precision
+    local offset_point=$(bc <<< "scale=6;$margin_size*$cm_in_point")
+
     # widen the page for scaling down
     [[ $scale = true ]] && local width_point=$((595 + $offset_point))\
                         || local width_point=595
