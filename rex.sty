@@ -1,10 +1,17 @@
 
 % ln -s $POPPY/rex.sty $TEXMF_LOCAL && sudo texconfig rehash
+% what about the "kpsewhich --var-value=TEXMFHOME" dir?
 
+\usepackage{ifluatex}
+
+% texlive packages
+\ifluatex
+\else
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-
 \usepackage{CJKutf8}
+\usepackage{extsizes}
+\fi
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -16,7 +23,6 @@
 \usepackage{array}
 \usepackage{enumitem}
 \usepackage{centernot}
-\usepackage{extsizes}
 \usepackage{datetime}
 \usepackage{mathabx}
 \usepackage{tikz}
@@ -29,7 +35,12 @@
 \usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{fancyvrb}
+\usepackage{mathrsfs}
+\usepackage{syntonly}
+\usepackage[retainorgcmds]{IEEEtrantools}
+\usepackage{stmaryrd}
 
+% external packages
 \usepackage{bussproofs}
 
 \DeclarePairedDelimiter\set\{\}
@@ -37,7 +48,7 @@
 \DeclarePairedDelimiter\paren()
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 
-\renewcommand{\implies}{\rightarrow}
+%\renewcommand{\implies}{\rightarrow}
 
 \newcommand{\bye}[1]{}
 \newcommand{\LeftToRight}{$\Longrightarrow$}
@@ -72,6 +83,10 @@
 \newcommand{\Select}[1]{\sigma_{#1}}
 \newcommand{\LJoin}{\ltimes}
 \newcommand{\byrule}[1]{\RightLabel{\textit{#1}}}
+\newcommand{\defeq}{\coloneqq}
+\newcommand{\partialto}{\rightharpoonup}
+\newcommand{\totalto}{\rightarrow}
+\newcommand{\powset}[1]{\mathscr{Pow}(#1)}
 
 \newcommand{\sA}{\struct{A}}
 \newcommand{\sB}{\struct{B}}
@@ -88,3 +103,56 @@
 \newcommand{\Integers}{\mathbb{Z}}
 \newcommand{\Rationals}{\mathbb{Q}}
 \newcommand{\Reals}{\mathbb{R}}
+
+% lualatex stuff
+\ifluatex
+\usepackage{fontspec}
+%https://tex.stackexchange.com/questions/234757/why-is-lualatex-so-slow-and-is-there-anything-i-can-do-about-it
+\ExplSyntaxOn
+\cs_set:Nn \__fontspec_load_external_fontoptions:Nn
+ {}
+\ExplSyntaxOff
+
+\usepackage{unicode-math}
+%https://tex.stackexchange.com/questions/438890/unicode-math-use-several-calligraphic-fonts-in-parallel
+\ExplSyntaxOn
+\makeatletter
+\cs_new:Npn\definemathgroup#1#2#3#4{
+  \fontspec_set_family:Nnn\l_my_math_font_family{SmallCapsFont={},ItalicFont={},BoldFont={},Script=Math,#3}{#4}
+  \exp_args:Nc\new@mathgroup{\string#1}
+  \::c\::n\::f\:::\new@symbolfont{\string#1}{TU}{\l_my_math_font_family}{\seriesdefault}{\shapedefault}
+  \cs_new:Npn#1##1{#2{\fam\use:c{\string#1}##1}}
+}
+\makeatother
+\ExplSyntaxOff
+
+% alternative math symbols
+%\definemathgroup\LatinModernmathcal\symcal{}{Latin Modern Math}
+\definemathgroup\Stixmathcal\symcal{}{Stix Math}
+\definemathgroup\StixTwomathcal\symcal{}{Stix Two Math}
+\definemathgroup\Xitsmathcal\symcal{}{XITS Math}
+\definemathgroup\Asanamathcal\symcal{}{Asana Math}
+\definemathgroup\Pagellamathcal\symcal{}{TeX Gyre Pagella Math}
+\definemathgroup\Termesmathcal\symcal{}{TeX Gyre Termes Math}
+\definemathgroup\DejaVumathcal\symcal{}{Tex Gyre DejaVu Math}
+\definemathgroup\Scholamathcal\symcal{}{TeX Gyre Schola Math}
+\definemathgroup\Bonummathcal\symcal{}{Tex Gyre Bonum Math}
+\definemathgroup\Libertinusmathcal\symcal{}{Libertinus Math}
+\definemathgroup\NeoEulermathcal\symcal{}{Neo Euler}
+\definemathgroup\Cambriamathcal\symcal{}{Cambria Math}
+
+\definemathgroup\Stixmathbb\symbb{}{Stix Math}
+\definemathgroup\StixTwomathbb\symbb{}{Stix Two Math}
+\definemathgroup\Xitsmathbb\symbb{}{XITS Math}
+\definemathgroup\Asanamathbb\symbb{}{Asana Math}
+\definemathgroup\Pagellamathbb\symbb{}{TeX Gyre Pagella Math}
+\definemathgroup\Termesmathbb\symbb{}{TeX Gyre Termes Math}
+\definemathgroup\DejaVumathbb\symbb{}{Tex Gyre DejaVu Math}
+\definemathgroup\Scholamathbb\symbb{}{TeX Gyre Schola Math}
+\definemathgroup\Bonummathbb\symbb{}{Tex Gyre Bonum Math}
+\definemathgroup\Libertinusmathbb\symbb{}{Libertinus Math}
+\definemathgroup\Cambriamathbb\symbb{}{Cambria Math}
+
+%\setmainfont{}
+%\setmathfont{}
+\fi
