@@ -14,6 +14,9 @@ unalias run-help
 autoload run-help
 alias help=run-help
 
+# opam configuration
+test -r /Users/Rex/.opam/opam-init/init.zsh && . /Users/Rex/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
 mapargs () {
     for arg in ${@:2}
     do
@@ -116,6 +119,7 @@ pdf_gutter () {
 }
 
 # handy aliases
+alias cat="ccat"
 alias sml="rlwrap sml"
 alias ocaml="rlwrap ocaml"
 alias zshrc="nano /Users/Rex/.zshrc.local"
@@ -135,6 +139,7 @@ alias dl-playlist="ytdl --yes-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]
 alias dlall="mapargs dl"
 alias hqdl="ytdl -f 'bestvideo[ext=webm]+bestaudio[ext=webm]/bestvideo+bestaudio' --merge-output-format webm"
 alias hqdl360="hqdl --user-agent \"\""
+
 # run quietly in background
 function qdl() { {dl --quiet $1 || echo '❌ this failed: ' $1} & }
 function pdl() { {ytdl -f 'bestvideo/best' --quiet $1 || '❌ this failed: ' $1} & }
@@ -161,12 +166,14 @@ function allbig5utf8() {
 mas="echo \"-----🍎 -app-store---------------------------------------------------------------\" && mas upgrade &&"
 brew="echo \"-----🍺 -brew--------------------------------------------------------------------\" && brew update && brew upgrade && brew cleanup &&"
 apm="echo \"-----☢️ -apm---------------------------------------------------------------------\" && apm upgrade --no-confirm && apm clean &&"
-antigen="echo \"-----💉 -antigen-----------------------------------------------------------------\" && antigen update && antigen cleanup --force &&"
-npm="echo \"-----🚀 -npm---------------------------------------------------------------------\" && npm update -g &&"
-gem="echo \"-----💎 -gem---------------------------------------------------------------------\" && gem update && gem cleanup &&"
+#this breaks stuff wtf antigen="echo \"-----💉 -antigen-----------------------------------------------------------------\" && antigen update && antigen cleanup --force &&"
+#not using this anymore npm="echo \"-----🚀 -npm---------------------------------------------------------------------\" && npm update -g &&"
+#not using this anymore gem="echo \"-----💎 -gem---------------------------------------------------------------------\" && gem update && gem cleanup &&"
 pip="echo \"-----🐍 -pip---------------------------------------------------------------------\" && pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs pip3 install -U -q &&"
+opam="echo \"-----🐫 -opam--------------------------------------------------------------------\" && opam update && opam upgrade && opam clean &&"
 done="echo \"-----👍 -done--------------------------------------------------------------------\""
 alias update="$mas$brew$apm$done"
+alias update-all="$mas$brew$apm$pip$opam$done"
 
 # antigen setup
 source /usr/local/share/antigen/antigen.zsh
