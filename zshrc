@@ -161,6 +161,15 @@ function allbig5utf8() {
         [[ ! -d $file ]] && big5utf8 $file
     done
 }
+# convert from GB18030 to utf8
+function gbutf8() { file $1 | grep -Fq "ISO-8859" && iconv -f GB18030 -t UTF-8 $1 > $1.temp && mv $1.temp $1 }
+# convert file under $1 with extension $2
+function allgbutf8() {
+    for file in $1/**/*(.)$2
+    do
+        [[ ! -d $file ]] && gbutf8 $file
+    done
+}
 
 # update helper
 mas="echo \"-----🍎 -app-store---------------------------------------------------------------\" && mas upgrade &&"
