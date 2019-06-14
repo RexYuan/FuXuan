@@ -203,4 +203,4 @@ autoload -U promptinit; promptinit
 prompt pure
 
 # fun stuff
-fortune -os -n 180 | cowsay -f party-parrot
+#fortune -os -n 180 | cowsay -f party-parrot
