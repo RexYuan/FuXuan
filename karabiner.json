@@ -3,7 +3,7 @@
     "title": "Rex's Karabiner Rules",
     "rules": [
         {
-            "description": "left_control sets real_control",
+            "description": "left_control and right_control sets real_control",
             "manipulators": [
                 {
                     "type": "basic",
@@ -34,12 +34,7 @@
                             }
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "description": "right_control sets real_control",
-            "manipulators": [
+                },
                 {
                     "type": "basic",
                     "from": {
@@ -73,7 +68,7 @@
             ]
         },
         {
-            "description": "caps_lock sends left_control and sets caps_control when pressed as modifier",
+            "description": "caps_lock sends left_control and sets caps_control when pressed as modifier, fn sends caps_lock when pressed alone",
             "manipulators": [
                 {
                     "type": "basic",
@@ -106,6 +101,29 @@
                         }
                     ],
                     "to_if_held_down": [
+                        {
+                            "key_code": "caps_lock",
+                            "hold_down_milliseconds": 100
+                        }
+                    ]
+                },
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "fn",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "fn",
+                            "lazy": true
+                        }
+                    ],
+                    "to_if_alone": [
                         {
                             "key_code": "caps_lock",
                             "hold_down_milliseconds": 100
@@ -158,7 +176,7 @@
             ]
         },
         {
-            "description": "left_option sets real_option",
+            "description": "left_option and right_option sets real_option",
             "manipulators": [
                 {
                     "type": "basic",
@@ -189,12 +207,7 @@
                             }
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "description": "right_option sets real_option",
-            "manipulators": [
+                },
                 {
                     "type": "basic",
                     "from": {
@@ -312,8 +325,7 @@
             ]
         },
         {
-            "comment": "for spotlight",
-            "description": "fn + spacebar => left_control + left_option + left_command + right_arrow",
+            "description": "left_control + spacebar as Spotlight shortcut",
             "manipulators": [
                 {
                     "type": "basic",
@@ -348,7 +360,7 @@
             ]
         },
         {
-            "description": "k => spacebar and j/l => right_command + right_option + left_arrow/right_arrow when in vlc",
+            "description": "J/K/L as VLN shortcuts",
             "manipulators": [
                 {
                     "type": "basic",
