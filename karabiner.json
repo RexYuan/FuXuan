@@ -3,7 +3,77 @@
     "title": "Rex's Karabiner Rules",
     "rules": [
         {
-            "description": "caps_lock => escape if alone, otherwise left_control and phantom_control",
+            "description": "left_control sets real_control",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "left_control",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "set_variable": {
+                                "name": "real_control",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "left_control"
+                        }
+                    ],
+                    "to_after_key_up": [
+                        {
+                            "set_variable": {
+                                "name": "real_control",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "right_control sets real_control",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "right_control",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "set_variable": {
+                                "name": "real_control",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "right_control"
+                        }
+                    ],
+                    "to_after_key_up": [
+                        {
+                            "set_variable": {
+                                "name": "real_control",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "caps_lock sends left_control and sets caps_control when pressed as modifier",
             "manipulators": [
                 {
                     "type": "basic",
@@ -18,7 +88,7 @@
                     "to": [
                         {
                             "set_variable": {
-                                "name": "phantom_control",
+                                "name": "caps_control",
                                 "value": 1
                             }
                         },
@@ -30,48 +100,135 @@
                     "to_after_key_up": [
                         {
                             "set_variable": {
-                                "name": "phantom_control",
+                                "name": "caps_control",
                                 "value": 0
                             }
                         }
                     ],
                     "to_if_alone": [
                         {
-                            "key_code": "escape"
+                            "key_code": "caps_lock",
+                            "hold_down_milliseconds": 100
                         }
                     ]
                 }
             ]
         },
         {
-            "description": "fn => caps_lock if held, otherwise fn",
+            "description": "right_command sends right_control and sets cmd_control when in emacs",
             "manipulators": [
                 {
                     "type": "basic",
                     "from": {
-                        "key_code": "fn",
+                        "key_code": "right_command",
                         "modifiers": {
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
-                    "to_after_key_up": [
+                    "to": [
                         {
-                            "key_code": "fn"
+                            "set_variable": {
+                                "name": "cmd_control",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "right_control"
                         }
                     ],
-                    "to_if_held_down": [
+                    "to_after_key_up": [
                         {
-                            "key_code": "caps_lock",
-                            "halt": true
+                            "set_variable": {
+                                "name": "cmd_control",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^org\\.gnu\\.Emacs$"
+                            ]
                         }
                     ]
                 }
             ]
         },
         {
-            "description": "return_or_enter => return_or_enter if alone, otherwise left_option and phantom_option",
+            "description": "left_option sets real_option",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "left_option",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "set_variable": {
+                                "name": "real_option",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "left_option"
+                        }
+                    ],
+                    "to_after_key_up": [
+                        {
+                            "set_variable": {
+                                "name": "real_option",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "right_option sets real_option",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "right_option",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "set_variable": {
+                                "name": "real_option",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "right_option"
+                        }
+                    ],
+                    "to_after_key_up": [
+                        {
+                            "set_variable": {
+                                "name": "real_option",
+                                "value": 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "return_or_enter sends right_option and sets return_option when pressed as modifier",
             "manipulators": [
                 {
                     "type": "basic",
@@ -86,19 +243,19 @@
                     "to": [
                         {
                             "set_variable": {
-                                "name": "phantom_option",
+                                "name": "return_option",
                                 "value": 1
                             }
                         },
                         {
-                            "key_code": "left_option",
+                            "key_code": "right_option",
                             "lazy": true
                         }
                     ],
                     "to_after_key_up": [
                         {
                             "set_variable": {
-                                "name": "phantom_option",
+                                "name": "return_option",
                                 "value": 0
                             }
                         }
@@ -112,8 +269,51 @@
             ]
         },
         {
+            "description": "left_command sends left_option and sets cmd_option when in emacs",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "left_command",
+                        "modifiers": {
+                            "optional": [
+                                "caps_lock"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "set_variable": {
+                                "name": "cmd_option",
+                                "value": 1
+                            }
+                        },
+                        {
+                            "key_code": "left_option"
+                        }
+                    ],
+                    "to_after_key_up": [
+                        {
+                            "set_variable": {
+                                "name": "cmd_option",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^org\\.gnu\\.Emacs$"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "comment": "for spotlight",
-            "description": "left_control + spacebar => left_control + left_option + spacebar unless phantom_control",
+            "description": "fn + spacebar => left_control + left_option + left_command + right_arrow",
             "manipulators": [
                 {
                     "type": "basic",
@@ -140,99 +340,15 @@
                     "conditions": [
                         {
                             "type": "variable_if",
-                            "name": "phantom_control",
-                            "value": 0
+                            "name": "real_control",
+                            "value": 1
                         }
                     ]
                 }
             ]
         },
         {
-            "comment": "for conversion between simplified and traditional chinese",
-            "description": "left_control + S/T => left_control + left_option + left_command + S/T",
-            "manipulators": [
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "s",
-                        "modifiers": {
-                            "mandatory": [
-                                "left_control"
-                            ],
-                            "optional": [
-                                "caps_lock"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "s",
-                            "modifiers": [
-                                "left_control",
-                                "left_option",
-                                "left_command"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "t",
-                        "modifiers": {
-                            "mandatory": [
-                                "left_control"
-                            ],
-                            "optional": [
-                                "caps_lock"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "t",
-                            "modifiers": [
-                                "left_control",
-                                "left_option",
-                                "left_command"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "comment": "for panel switching in split view",
-            "description": "left_command + caps_lock => left_control + left_option + left_command + Q",
-            "manipulators": [
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "caps_lock",
-                        "modifiers": {
-                            "mandatory": [
-                                "left_command"
-                            ],
-                            "optional": [
-                                "caps_lock"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "q",
-                            "modifiers": [
-                                "left_control",
-                                "left_option",
-                                "left_command"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "description": "k => spacebar and j/l => right_command + right_option + left_arrow/right_arrow when vlc is frontmost",
+            "description": "k => spacebar and j/l => right_command + right_option + left_arrow/right_arrow when in vlc",
             "manipulators": [
                 {
                     "type": "basic",
