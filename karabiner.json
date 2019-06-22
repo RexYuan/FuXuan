@@ -11,7 +11,7 @@
                         "key_code": "left_control",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -41,7 +41,7 @@
                         "key_code": "right_control",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -68,7 +68,7 @@
             ]
         },
         {
-            "description": "caps_lock sends left_control and sets caps_control when pressed as modifier, fn sends caps_lock when pressed alone",
+            "description": "caps_lock sends left_control and sets caps_control, fn sends caps_lock when pressed alone",
             "manipulators": [
                 {
                     "type": "basic",
@@ -76,7 +76,7 @@
                         "key_code": "caps_lock",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -88,8 +88,7 @@
                             }
                         },
                         {
-                            "key_code": "left_control",
-                            "lazy": true
+                            "key_code": "left_control"
                         }
                     ],
                     "to_after_key_up": [
@@ -99,12 +98,6 @@
                                 "value": 0
                             }
                         }
-                    ],
-                    "to_if_held_down": [
-                        {
-                            "key_code": "caps_lock",
-                            "hold_down_milliseconds": 100
-                        }
                     ]
                 },
                 {
@@ -113,7 +106,7 @@
                         "key_code": "fn",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -141,7 +134,7 @@
                         "key_code": "right_command",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -184,7 +177,7 @@
                         "key_code": "left_option",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -214,7 +207,7 @@
                         "key_code": "right_option",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -249,7 +242,7 @@
                         "key_code": "return_or_enter",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -290,7 +283,7 @@
                         "key_code": "left_command",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -336,7 +329,7 @@
                                 "left_control"
                             ],
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -368,7 +361,7 @@
                         "key_code": "k",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -392,7 +385,7 @@
                         "key_code": "j",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
@@ -420,7 +413,7 @@
                         "key_code": "l",
                         "modifiers": {
                             "optional": [
-                                "caps_lock"
+                                "any"
                             ]
                         }
                     },
