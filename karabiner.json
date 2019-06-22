@@ -3,7 +3,7 @@
     "title": "Rex's Karabiner Rules",
     "rules": [
         {
-            "description": "left_control and right_control sets real_control",
+            "description": "left_control sends hyper (left_shift + left_control + left_option + left_command)",
             "manipulators": [
                 {
                     "type": "basic",
@@ -17,51 +17,12 @@
                     },
                     "to": [
                         {
-                            "set_variable": {
-                                "name": "real_control",
-                                "value": 1
-                            }
-                        },
-                        {
-                            "key_code": "left_control"
-                        }
-                    ],
-                    "to_after_key_up": [
-                        {
-                            "set_variable": {
-                                "name": "real_control",
-                                "value": 0
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "right_control",
-                        "modifiers": {
-                            "optional": [
-                                "any"
+                            "key_code": "left_command",
+                            "modifiers": [
+                                "left_shift",
+                                "left_control",
+                                "left_option"
                             ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "set_variable": {
-                                "name": "real_control",
-                                "value": 1
-                            }
-                        },
-                        {
-                            "key_code": "right_control"
-                        }
-                    ],
-                    "to_after_key_up": [
-                        {
-                            "set_variable": {
-                                "name": "real_control",
-                                "value": 0
-                            }
                         }
                     ]
                 }
@@ -169,71 +130,6 @@
             ]
         },
         {
-            "description": "left_option and right_option sets real_option",
-            "manipulators": [
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "left_option",
-                        "modifiers": {
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "set_variable": {
-                                "name": "real_option",
-                                "value": 1
-                            }
-                        },
-                        {
-                            "key_code": "left_option"
-                        }
-                    ],
-                    "to_after_key_up": [
-                        {
-                            "set_variable": {
-                                "name": "real_option",
-                                "value": 0
-                            }
-                        }
-                    ]
-                },
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "right_option",
-                        "modifiers": {
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "set_variable": {
-                                "name": "real_option",
-                                "value": 1
-                            }
-                        },
-                        {
-                            "key_code": "right_option"
-                        }
-                    ],
-                    "to_after_key_up": [
-                        {
-                            "set_variable": {
-                                "name": "real_option",
-                                "value": 0
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "description": "return_or_enter sends right_option and sets return_option when pressed as modifier",
             "manipulators": [
                 {
@@ -311,126 +207,6 @@
                             "type": "frontmost_application_if",
                             "bundle_identifiers": [
                                 "^org\\.gnu\\.Emacs$"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "description": "left_control + spacebar as Spotlight shortcut",
-            "manipulators": [
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "spacebar",
-                        "modifiers": {
-                            "mandatory": [
-                                "left_control"
-                            ],
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "spacebar",
-                            "modifiers": [
-                                "left_control",
-                                "left_option"
-                            ]
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "type": "variable_if",
-                            "name": "real_control",
-                            "value": 1
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "description": "J/K/L as VLN shortcuts",
-            "manipulators": [
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "k",
-                        "modifiers": {
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "spacebar"
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "type": "frontmost_application_if",
-                            "bundle_identifiers": [
-                                "^org\\.videolan\\.vlc$"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "j",
-                        "modifiers": {
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "left_arrow",
-                            "modifiers": [
-                                "right_command",
-                                "right_option"
-                            ]
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "type": "frontmost_application_if",
-                            "bundle_identifiers": [
-                                "^org\\.videolan\\.vlc$"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "type": "basic",
-                    "from": {
-                        "key_code": "l",
-                        "modifiers": {
-                            "optional": [
-                                "any"
-                            ]
-                        }
-                    },
-                    "to": [
-                        {
-                            "key_code": "right_arrow",
-                            "modifiers": [
-                                "right_command",
-                                "right_option"
-                            ]
-                        }
-                    ],
-                    "conditions": [
-                        {
-                            "type": "frontmost_application_if",
-                            "bundle_identifiers": [
-                                "^org\\.videolan\\.vlc$"
                             ]
                         }
                     ]
