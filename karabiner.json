@@ -119,7 +119,7 @@
                         "key_code": "caps_lock",
                         "modifiers": {
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
@@ -147,7 +147,7 @@
                         "key_code": "spacebar",
                         "modifiers": {
                             "optional": [
-                                "any"
+                                "caps_lock"
                             ]
                         }
                     },
@@ -206,6 +206,130 @@
                             "modifiers": [
                                 "left_option"
                             ]
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "device_if",
+                            "identifiers": [
+                                {
+                                    "vendor_id": 2652,
+                                    "product_id": 34050
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "description": "paste => hyper + spacebar",
+                    "type": "basic",
+                    "parameters": {
+                        "basic.simultaneous_threshold_milliseconds": 1
+                    },
+                    "from": {
+                        "simultaneous": [
+                            {
+                                "key_code": "left_command"
+                            },
+                            {
+                                "key_code": "v"
+                            }
+                        ],
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "spacebar",
+                            "modifiers": [
+                                "left_shift",
+                                "left_control",
+                                "left_option",
+                                "left_command"
+                            ]
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "device_if",
+                            "identifiers": [
+                                {
+                                    "vendor_id": 2652,
+                                    "product_id": 34050
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "description": "web left => select chinese",
+                    "type": "basic",
+                    "parameters": {
+                        "basic.simultaneous_threshold_milliseconds": 1
+                    },
+                    "from": {
+                        "simultaneous": [
+                            {
+                                "key_code": "left_command"
+                            },
+                            {
+                                "key_code": "open_bracket"
+                            }
+                        ],
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "select_input_source": {
+                                "input_source_id": "com.apple.inputmethod.TCIM.Zhuyin"
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "device_if",
+                            "identifiers": [
+                                {
+                                    "vendor_id": 2652,
+                                    "product_id": 34050
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "description": "web right => select english",
+                    "type": "basic",
+                    "parameters": {
+                        "basic.simultaneous_threshold_milliseconds": 1
+                    },
+                    "from": {
+                        "simultaneous": [
+                            {
+                                "key_code": "left_command"
+                            },
+                            {
+                                "key_code": "close_bracket"
+                            }
+                        ],
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "select_input_source": {
+                                "input_source_id": "com.apple.keylayout.US"
+                            }
                         }
                     ],
                     "conditions": [
