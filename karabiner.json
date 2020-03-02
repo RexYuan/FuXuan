@@ -6,7 +6,7 @@
             "description": "Macbook Air Internal Keyboard Keybindings",
             "manipulators": [
                 {
-                    "description": "caps_lock => backspace",
+                    "description": "caps_lock => left_control",
                     "type": "basic",
                     "from": {
                         "key_code": "caps_lock",
@@ -18,7 +18,7 @@
                     },
                     "to": [
                         {
-                            "key_code": "delete_or_backspace"
+                            "key_code": "left_control"
                         }
                     ],
                     "conditions": [
@@ -34,7 +34,7 @@
                     ]
                 },
                 {
-                    "description": "spacebar => left_control if alone",
+                    "description": "spacebar => left_control if not alone in emacs",
                     "type": "basic",
                     "from": {
                         "key_code": "spacebar",

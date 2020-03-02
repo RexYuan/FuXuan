@@ -1,3 +1,4 @@
+alias doom="~/.emacs.d/bin/doom"
 
 # run for interactive shells
 # ln -s $POPPY/zshrc ~/.zshrc.local
