@@ -1,0 +1,5 @@
+# global gitignore
+# run: git config --global core.excludesfile "$POPPY/gitignore"
+
+.gitignore
+.DS_Store

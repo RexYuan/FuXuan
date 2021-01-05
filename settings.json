@@ -1,0 +1,129 @@
+{
+  "atomKeymap.promptV3Features": true,
+  "editor.fontSize": 16,
+  "terminal.integrated.fontSize": 16,
+  "[Log]": {
+    "editor.fontSize": 16
+  },
+  "editor.fontFamily": "DejaVu Sans Mono, Menlo, Monaco, 'Courier New', monospace",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.editor.enablePreview": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.list.automaticKeyboardNavigation": false,
+  "window.restoreWindows": "folders",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.snm",
+    "*.synctex(busy)",
+    "*.synctex.gz(busy)",
+    "*.nav",
+    "*.synctex.gz",
+    "_minted-*/*",
+    "_minted-*"
+  ],
+  "latex-workshop.latex.autoClean.run": "onBuilt",
+  "latex-workshop.latex.tools":[
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-shell-escape",
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-pdf",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "lualatexmk",
+      "command": "latexmk",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-lualatex",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "latexmk_rconly",
+      "command": "latexmk",
+      "args": [
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "pdflatex",
+      "command": "pdflatex",
+      "args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "%DOC%"
+      ],
+      "env": {}
+    },
+    {
+      "name": "bibtex",
+      "command": "bibtex",
+      "args": [
+        "%DOCFILE%"
+      ],
+      "env": {}
+    }
+  ],
+  "window.zoomLevel": 0,
+  "python.pythonPath": "/usr/local/opt/python@3.8/bin/python3",
+  "vsicons.dontShowNewVersionMessage": true,
+  "C_Cpp.updateChannel": "Insiders",
+  "editor.rulers": [72,79,99],
+  "workbench.colorCustomizations": {
+    "editorRuler.foreground": "#2b3239"
+},
+"workbench.colorTheme": "Nord",
+"explorer.confirmDragAndDrop": false,
+"editor.minimap.enabled": false,
+"cmake.configureOnOpen": false,
+"C_Cpp.default.cppStandard": "gnu++20",
+"C_Cpp.default.cStandard": "gnu18",
+
+"todohighlight.keywords": [
+  "FIX:",
+  "REVIEW:",
+  "NOTE:",
+  "CLEAN:",
+],
+"workbench.editorAssociations": [
+  {
+    "viewType": "jupyter.notebook.ipynb",
+    "filenamePattern": "*.ipynb"
+  }
+],
+}
