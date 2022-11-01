@@ -1,0 +1,119 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Medium Length Professional CV
+% LaTeX Template
+% Version 2.0 (8/5/13)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Trey Hunner (http://www.treyhunner.com/)
+%
+% Important note:
+% This template requires the resume.cls file to be in the same directory as the
+% .tex file. The resume.cls file provides the resume style used for structuring the
+% document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{resume} % Use the custom resume.cls style
+
+\usepackage[left=0.5in,top=0.5in,right=0.5in,bottom=0.5in]{geometry} % Document margins
+
+\name{Chih-cheng Yuan} % Your name
+%\address{123 Broadway \\ City, State 12345} % Your address
+%\address{123 Pleasant Lane \\ City, State 12345} % Your secondary addess (optional)
+\address{chihchengyuan@gmail.com} % Your phone number and email
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Education}
+
+\begin{rSubsection}{National Taiwan Normal University}{2014 - 2019}{B.S. in Computer Science and Information Engineering}{}
+\item Took a course in computational logic where various logics for verification such as LTL, CTL, and hoare logic are discusssed and
+tools such as Coq, nusmv, and z3 are used.
+\item Other related courses include Algorithms, Discrete Mathemetics, Automata Theory, Theory of Computing, Mathemetical logic, Logical Programming
+in Prolog, Functional Programming in Common Lisp; Programming Language in SML (Coursera).
+Average GPA of above except online courses is {\bf 4.09} out of 4.3.
+\end{rSubsection}
+
+{\bf FLOLAC Summer School at National Taiwan University} \hfill {2017, 2018, 2019} \\
+{\bf CONFESTA Summer School at University of Chinese Academy of Sciences} \hfill {2018}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	WORK EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Experience}
+
+\begin{rSubsection}{Institute of Information Science, Academia Sinica}{2019 - Present}{Research Assistant}{}
+\item (On-going) Developed bit-level hardware verification safety algorithm based on algorithmic boolean learning and
+its implementation which solves about 300 of 747 instances in HWMCC10 benchmark.
+Optimized implementation with improved algorithm which combines learning and interpolation method solves about 400 instances,
+where Berkeley's state-of-the-art tool ABC's interpolation algorithm solves around 600 instances on the same computer.
+
+AIG input parser, solver interface, program data structures, profiling and logging, and backend algorithm engines
+are independently implemented in C++ with minisat.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Institute of Information Science, Academia Sinica}{2017 – 2019}{Adjunct Research Assistant}{}
+\item SAT-solving reduction of poset cover problem for message sequence chart synthesis  implemented in Python with z3.
+\item NP-hardness of k-anonymity checking problem and a randomized approach thereof for the 2010 Taiwanese census data
+implemented in Python with MySQL.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Inside.com.tw}{2016}{Software Engineering Intern}{}
+\item Backend Wordpress theme development; collaboration  and communication with frontend team.
+\item In-house editor user-interface feature requests for editorial team.
+\end{rSubsection}
+
+%------------------------------------------------
+
+\begin{rSubsection}{Inside.com.tw}{2015}{Editorial Intern}{}
+\item Coverage, interviewing, and reporting on technology and startup related scenes.
+\end{rSubsection}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	TECHNICAL STRENGTHS SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{rSection}{Awards \& Certificates}
+
+{\bf Academic Excellence Award} \hfill {2016} \\
+{\em Ranked top 5\% in a class} \\
+{\bf TOEFL iBT} \hfill {2016} \\
+{\em Score: 108 (Reading: 29 / Listening: 30 / Speaking: 22 / Writing: 27)} \\
+{\bf TOEIC} \hfill {2013} \\
+{\em Score: 960}
+
+\end{rSection}
+
+%----------------------------------------------------------------------------------------
+%	EXAMPLE SECTION
+%----------------------------------------------------------------------------------------
+
+%\begin{rSection}{Section Name}
+
+%Section content\ldots
+
+%\end{rSection}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
