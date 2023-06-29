@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. secret.sh
+. $(dirname "$0")/secret.sh
 
 CURRENT_IP=$(curl -s http://ipv4.icanhazip.com)
 DNS_IP=$(dig +short "${URLS[0]}" | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | awk 'NR==1{print}')
