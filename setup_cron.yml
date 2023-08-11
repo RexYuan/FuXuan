@@ -1,0 +1,43 @@
+---
+- name: Set up Cron Job for Command
+  hosts: nuc
+
+  tasks:
+    - name: Check if logs/ Exists
+      stat:
+        path: /home/rex/logs
+      register: logs_directory_exist
+
+    - name: Create logs/ if Not Exist
+      file:
+        path: /home/rex/logs
+        state: directory
+      when: not logs_directory_exist.stat.exists
+
+    - name: Check if secret.sh exists
+      stat:
+        path: /home/rex/Projects/FuXuan/secret.sh
+      register: secret_file_exist
+
+    - name: Copy secret.sh if not exists
+      copy:
+        src: /Users/rexyuan/Projects/FuXuan/secret.sh
+        dest: /home/rex/Projects/FuXuan/secret.sh
+      when: not secret_file_exist.stat.exists
+
+    - name: Check if File Exists
+      stat:
+        path: /home/rex/Projects/FuXuan/ddns.sh
+      register: ddns_script_exist
+
+    - name: Fail if File Does Not Exist
+      fail:
+        msg: "The file '/home/rex/Projects/FuXuan/ddns.sh' does not exist"
+      when: not ddns_script_exist.stat.exists
+
+    - name: Add Cron Job
+      cron:
+        name: "ddns_logging"
+        minute: "0"
+        hour: "*/2"
+        job: "echo -n \"[$(date)] \" >> /home/rex/logs/ddns.log; /home/rex/Projects/FuXuan/ddns.sh >> /home/rex/logs/ddns.log"
