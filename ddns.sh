@@ -1,6 +1,8 @@
 #!/bin/bash
 
-. $(dirname "$0")/secret.sh
+SECRET=$(dirname $(realpath "$0"))/secret.sh
+[ -e "$SECRET" ] || (echo "secret.sh does not exist."; exit 1)
+. $SECRET
 
 CURRENT_IP=$(curl -s http://ipv4.icanhazip.com)
 DNS_IP=$(dig +short "${URLS[0]}" | grep -Eo '([0-9]{1,3}\.){3}[0-9]{1,3}' | awk 'NR==1{print}')
