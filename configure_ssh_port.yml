@@ -1,0 +1,19 @@
+---
+- name: Configure SSH Port
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Change SSH Port
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Port .*'
+        insertafter: '^#Port '
+        line: 'Port 7777'
+      notify: restart sshd
+
+  handlers:
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted

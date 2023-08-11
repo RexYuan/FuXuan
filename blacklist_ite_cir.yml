@@ -1,0 +1,16 @@
+---
+- name: Blacklist ite_cir Module
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Remove ite_cir Module if Loaded
+      command: modprobe -r ite_cir
+
+    - name: Blacklist ite_cir Module
+      lineinfile:
+        path: /etc/modprobe.d/blacklist.conf
+        line: 'blacklist ite_cir'
+
+    - name: Update Initramfs
+      command: update-initramfs -u
