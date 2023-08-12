@@ -1,5 +1,5 @@
 ---
-- name: Set up Cron Job for Command
+- name: Set up ddns
   hosts: nuc
 
   tasks:
