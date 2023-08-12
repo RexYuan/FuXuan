@@ -7,7 +7,6 @@
     - name: Change SSH Port
       lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: '^Port .*'
         insertafter: '^#Port '
         line: 'Port 7777'
       notify: restart sshd

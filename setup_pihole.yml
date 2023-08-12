@@ -1,0 +1,65 @@
+---
+- name: Install Pi-hole with Docker on Ubuntu
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Update resolv.conf symlink
+      file:
+        src: /run/systemd/resolve/resolv.conf
+        dest: /etc/resolv.conf
+        state: link
+
+    - name: Disable DNSStubListener in resolved.conf
+      lineinfile:
+        dest: /etc/systemd/resolved.conf
+        insertafter: '^#DNSStubListener='
+        line: 'DNSStubListener=no'
+      notify: Restart systemd-resolved
+
+    - name: Check if etc-pihole/ Exists
+      stat:
+        path: /home/rex/pihole/etc-pihole
+      register: etc_pihole_exist
+
+    - name: Create etc-pihole/ if Not Exist
+      file:
+        path: /home/rex/pihole/etc-pihole
+        state: directory
+      when: not etc_pihole_exist.stat.exists
+
+    - name: Check if etc-dnsmasq.d/ Exists
+      stat:
+        path: /home/rex/pihole/etc-dnsmasq.d
+      register: etc_dnsmasqd_exist
+
+    - name: Create etc-dnsmasq.d/ if Not Exist
+      file:
+        path: /home/rex/pihole/etc-dnsmasq.d
+        state: directory
+      when: not etc_dnsmasqd_exist.stat.exists
+
+    - name: Start Pi-hole container
+      docker_container:
+        name: pihole
+        image: pihole/pihole:latest
+        ports:
+          - "53:53/tcp"
+          - "53:53/udp"
+          - "67:67/udp"
+          - "8080:80/tcp"
+        env:
+          TZ: 'Asia/Taipei'
+          WEBPASSWORD: 'pihole'
+        volumes:
+          - '/home/rex/pihole/etc-pihole:/etc/pihole'
+          - '/home/rex/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
+        capabilities:
+          - NET_ADMIN
+        restart_policy: unless-stopped
+
+  handlers:
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
