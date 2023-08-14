@@ -1,0 +1,27 @@
+---
+- name: Set up Home Assistant with Docker
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Start Home Assistant Docker container
+      docker_container:
+        name: homeassistant
+        image: "ghcr.io/home-assistant/home-assistant:stable"
+        volumes:
+          - /home/rex/homeassistant/config:/config
+          - /etc/localtime:/etc/localtime:ro
+        restart_policy: unless-stopped
+        privileged: true
+        network_mode: host
+
+    - name: Install HACS
+      community.docker.docker_container_exec:
+        container: homeassistant
+        command: bash -c 'wget -O - https://get.hacs.xyz | bash -'
+
+    - name: Restart container
+      docker_container:
+        name: homeassistant
+        restart: true
+

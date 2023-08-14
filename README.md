@@ -6,4 +6,5 @@ ansible-playbook git_clone.yml
 ansible-playbook setup_ddns.yml
 ansible-playbook install_docker.yaml --ask-become-pass
 ansible-playbook setup_pihole.yml --ask-become-pass
+ansible-playbook setup_home_assistant.yaml --ask-become-pass
 ```
