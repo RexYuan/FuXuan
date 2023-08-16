@@ -2,6 +2,8 @@
 - name: Install Pi-hole with Docker on Ubuntu
   hosts: nuc
   become: yes
+  vars_files:
+    - secret.yml
 
   tasks:
     - name: Update resolv.conf symlink
@@ -50,7 +52,7 @@
           - "8080:80/tcp"
         env:
           TZ: 'Asia/Taipei'
-          WEBPASSWORD: 'pihole'
+          WEBPASSWORD: '{{ pihole_key }}'
         volumes:
           - '/home/rex/pihole/etc-pihole:/etc/pihole'
           - '/home/rex/pihole/etc-dnsmasq.d:/etc/dnsmasq.d'

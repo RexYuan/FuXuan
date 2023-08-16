@@ -6,4 +6,4 @@
     - name: Clone Git Repository
       git:
         repo: https://github.com/RexYuan/FuXuan.git
-        dest: ~/Projects/FuXuan
+        dest: /home/rex/Projects/FuXuan
