@@ -3,6 +3,11 @@
   hosts: nuc
 
   tasks:
+    - name: Clone Git Repository
+      git:
+        repo: https://github.com/RexYuan/FuXuan.git
+        dest: /home/rex/Projects/FuXuan
+
     - name: Check if logs/ Exists
       stat:
         path: /home/rex/logs

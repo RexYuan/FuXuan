@@ -1,9 +1,0 @@
----
-- name: Git Clone Repository
-  hosts: nuc
-
-  tasks:
-    - name: Clone Git Repository
-      git:
-        repo: https://github.com/RexYuan/FuXuan.git
-        dest: /home/rex/Projects/FuXuan
