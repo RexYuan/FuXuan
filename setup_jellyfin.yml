@@ -29,25 +29,25 @@
         dest: /home/rex/.config/rclone/rclone.conf
       become: no
 
-    - name: Sync files using rclone - videos
+    - name: Copy files using rclone - videos
       command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Videos /home/rex/jellyfin/videos
       become: no
-      tags: sync
+      tags: copy
 
-    - name: Sync files using rclone - movies
-      command: rclone sync shared:/YingTing\ Wu/Rex/Jellyfin/Movies /home/rex/jellyfin/movies
+    - name: Copy files using rclone - movies
+      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Movies /home/rex/jellyfin/movies
       become: no
-      tags: sync
+      tags: copy
 
-    - name: Sync files using rclone - shows
-      command: rclone sync shared:/YingTing\ Wu/Rex/Jellyfin/Shows /home/rex/jellyfin/shows
+    - name: Copy files using rclone - shows
+      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Shows /home/rex/jellyfin/shows
       become: no
-      tags: sync
+      tags: copy
 
-    - name: Sync files using rclone - books
-      command: rclone sync shared:/YingTing\ Wu/Rex/Jellyfin/Books /home/rex/jellyfin/books
+    - name: Copy files using rclone - books
+      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Books /home/rex/jellyfin/books
       become: no
-      tags: sync
+      tags: copy
 
     - name: Create Jellyfin container
       docker_container:
