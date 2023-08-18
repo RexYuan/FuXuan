@@ -7,4 +7,5 @@ ansible-playbook install_docker.yml --ask-become-pass
 ansible-playbook setup_pihole.yml --ask-become-pass
 ansible-playbook setup_home_assistant.yml --ask-become-pass
 ansible-playbook setup_jellyfin.yml --ask-become-pass --skip-tags sync
+ansible-playbook setup_calibre.yml --ask-become-pass
 ```

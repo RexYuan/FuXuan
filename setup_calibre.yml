@@ -1,0 +1,35 @@
+---
+- name: Deploy Calibre Web
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Deploy Calibre Web container
+      docker_container:
+        name: calibre
+        image: lscr.io/linuxserver/calibre-web:latest
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          TZ: "Asia/Taipei"
+          DOCKER_MODS: "linuxserver/mods:universal-calibre"
+          OAUTHLIB_RELAX_TOKEN_SCOPE: "1"
+        volumes:
+          - "/home/rex/calibre/config:/config"
+          - "/home/rex/calibre/books:/books"
+        ports:
+          - "8083:8083"
+        restart_policy: unless-stopped
+
+    - name: Wait for init
+      community.docker.docker_container_exec:
+        container: calibre
+        command: |
+          bash -c "while ! type calibredb &> /dev/null; do sleep 1; done;"
+
+    - name: Prepare database
+      community.docker.docker_container_exec:
+        container: calibre
+        command: |
+          bash -c "mkdir /calibre-library; \
+          calibredb add /books/ -r --with-library=/calibre-library/"
