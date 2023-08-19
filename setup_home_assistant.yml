@@ -1,5 +1,5 @@
 ---
-- name: Set up Home Assistant with Docker
+- name: Set up Home Assistant
   hosts: nuc
   become: yes
 

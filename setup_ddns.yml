@@ -8,34 +8,22 @@
         repo: https://github.com/RexYuan/FuXuan.git
         dest: /home/rex/Projects/FuXuan
 
-    - name: Check if logs/ Exists
-      stat:
-        path: /home/rex/logs
-      register: logs_directory_exist
-
-    - name: Create logs/ if Not Exist
+    - name: Create logs/
       file:
         path: /home/rex/logs
         state: directory
-      when: not logs_directory_exist.stat.exists
 
-    - name: Check if secret.sh exists
-      stat:
-        path: /home/rex/Projects/FuXuan/secret.sh
-      register: secret_file_exist
-
-    - name: Copy secret.sh if not exists
+    - name: Copy secret.sh
       copy:
         src: /Users/rexyuan/Projects/FuXuan/secret.sh
         dest: /home/rex/Projects/FuXuan/secret.sh
-      when: not secret_file_exist.stat.exists
 
-    - name: Check if File Exists
+    - name: Check if ddns.sh Exists
       stat:
         path: /home/rex/Projects/FuXuan/ddns.sh
       register: ddns_script_exist
 
-    - name: Fail if File Does Not Exist
+    - name: Fail if ddns.sh Does Not Exist
       fail:
         msg: "The file '/home/rex/Projects/FuXuan/ddns.sh' does not exist"
       when: not ddns_script_exist.stat.exists

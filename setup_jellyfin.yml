@@ -1,38 +1,40 @@
 ---
+- import_playbook: install_rclone.yml
+
 - name: Set up Jellyfin
   hosts: nuc
   become: yes
-  vars_files:
-    - secret.yml
 
   tasks:
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-
-    - name: Install rclone package
-      apt:
-        name: rclone
-
-    - name: Verify rclone installation
-      command: rclone --version
+    - name: Create jellyfin/
+      file:
+        path: /home/rex/jellyfin
+        state: directory
       become: no
 
-    - name: Create rclone config file
-      copy:
-        content: |
-          [shared]
-          type = dropbox
-          client_id = {{ dropbox_app_key }}
-          client_secret = {{ dropbox_app_secret }}
-          token = {{ dropbox_access_token }}
-        dest: /home/rex/.config/rclone/rclone.conf
+    - name: Create jellyfin/config/
+      file:
+        path: /home/rex/jellyfin/config
+        state: directory
       become: no
 
-    - name: Copy files using rclone - videos
-      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Videos /home/rex/jellyfin/videos
+    - name: Create jellyfin/cache/
+      file:
+        path: /home/rex/jellyfin/cache
+        state: directory
       become: no
-      tags: copy
+
+    - name: Create jellyfin/movies/
+      file:
+        path: /home/rex/jellyfin/movies
+        state: directory
+      become: no
+
+    - name: Create jellyfin/shows/
+      file:
+        path: /home/rex/jellyfin/shows
+        state: directory
+      become: no
 
     - name: Copy files using rclone - movies
       command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Movies /home/rex/jellyfin/movies
@@ -41,11 +43,6 @@
 
     - name: Copy files using rclone - shows
       command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Shows /home/rex/jellyfin/shows
-      become: no
-      tags: copy
-
-    - name: Copy files using rclone - books
-      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Books /home/rex/jellyfin/books
       become: no
       tags: copy
 
@@ -59,10 +56,8 @@
           - /etc/hosts:/tmp/hosts
           - /home/rex/jellyfin/config:/config
           - /home/rex/jellyfin/cache:/cache
-          - /home/rex/jellyfin/videos:/videos
           - /home/rex/jellyfin/movies:/movies
           - /home/rex/jellyfin/shows:/shows
-          - /home/rex/jellyfin/books:/books
         restart_policy: unless-stopped
         env:
           JELLYFIN_PublishedServerUrl: http://nuc.rexyuan.com

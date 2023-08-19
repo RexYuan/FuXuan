@@ -1,5 +1,5 @@
 ---
-- name: Install Pi-hole with Docker on Ubuntu
+- name: Set up Pi-hole
   hosts: nuc
   become: yes
   vars_files:

@@ -1,9 +1,34 @@
 ---
-- name: Deploy Calibre Web
+- import_playbook: install_rclone.yml
+
+- name: Set up Calibre-Web
   hosts: nuc
   become: yes
 
   tasks:
+    - name: Create calibre/
+      file:
+        path: /home/rex/calibre
+        state: directory
+      become: no
+
+    - name: Create calibre/config/
+      file:
+        path: /home/rex/calibre/config
+        state: directory
+      become: no
+
+    - name: Create calibre/books/
+      file:
+        path: /home/rex/calibre/books
+        state: directory
+      become: no
+
+    - name: Copy files using rclone - books
+      command: rclone copy shared:/YingTing\ Wu/Rex/Calibre/Books /home/rex/calibre/books
+      become: no
+      tags: copy
+
     - name: Deploy Calibre Web container
       docker_container:
         name: calibre
