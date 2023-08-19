@@ -1,0 +1,61 @@
+---
+- name: Install Samba
+  hosts: nuc
+  become: true
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install samba package
+      apt:
+        name: samba
+
+    - name: Verify samba installation
+      command: systemctl status smbd
+
+    - name: Configure workgroup in smb.conf
+      lineinfile:
+        dest: /etc/samba/smb.conf
+        regexp: '^   workgroup = .*'
+        line: '   workgroup = REXGROUP'
+
+    - name: Configure server string in smb.conf
+      lineinfile:
+        dest: /etc/samba/smb.conf
+        regexp: '^   server string = .*'
+        line: '   server string = rex_samba'
+
+    - name: Configure path in smb.conf
+      blockinfile:
+        dest: /etc/samba/smb.conf
+        block: |
+          [Home]
+             comment = Shared home
+             path = /home/rex
+             browseable = yes
+             writable = yes
+             read only = no
+             guest ok = no
+             valid users = @rex
+
+    - name: Set up samba user
+      expect:
+        command: smbpasswd -a rex
+        responses:
+          "New SMB password:": "{{ samba_password }}"
+          "Retype new SMB password:": "{{ samba_password }}"
+      no_log: true
+
+    - name: Allow samba in UFW
+      ufw:
+        rule: allow
+
+    - name: Restart Samba service
+      service:
+        name: smbd
+        state: restarted
+
