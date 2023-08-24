@@ -46,6 +46,13 @@
       become: no
       tags: copy
 
+    - name: Copy fonts
+      copy:
+        src: "{{ item }}"
+        dest: /home/rex/jellyfin/fonts
+      with_fileglob:
+        - "/Users/rexyuan/Projects/FuXuan/Noto_Sans_TC/static/*"
+
     - name: Create Jellyfin container
       docker_container:
         name: jellyfin
@@ -58,6 +65,7 @@
           - /home/rex/jellyfin/cache:/cache
           - /home/rex/jellyfin/movies:/movies
           - /home/rex/jellyfin/shows:/shows
+          - /home/rex/jellyfin/fonts:/fonts
         restart_policy: unless-stopped
         env:
           JELLYFIN_PublishedServerUrl: http://nuc.rexyuan.com
