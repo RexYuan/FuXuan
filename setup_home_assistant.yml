@@ -4,6 +4,15 @@
   become: yes
 
   tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /home/rex/homeassistant
+        - /home/rex/homeassistant/config
+      become: no
+
     - name: Start Home Assistant Docker container
       docker_container:
         name: homeassistant

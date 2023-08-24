@@ -1,27 +1,20 @@
 ---
 - import_playbook: install_rclone.yml
+  tags: copy
 
 - name: Set up Calibre-Web
   hosts: nuc
   become: yes
 
   tasks:
-    - name: Create calibre/
+    - name: Create bind mounts
       file:
-        path: /home/rex/calibre
+        path: "{{ item }}"
         state: directory
-      become: no
-
-    - name: Create calibre/config/
-      file:
-        path: /home/rex/calibre/config
-        state: directory
-      become: no
-
-    - name: Create calibre/books/
-      file:
-        path: /home/rex/calibre/books
-        state: directory
+      loop:
+        - /home/rex/calibre
+        - /home/rex/calibre/config
+        - /home/rex/calibre/books
       become: no
 
     - name: Copy files using rclone - books

@@ -19,27 +19,15 @@
         line: 'DNSStubListener=no'
       notify: Restart systemd-resolved
 
-    - name: Check if etc-pihole/ Exists
-      stat:
-        path: /home/rex/pihole/etc-pihole
-      register: etc_pihole_exist
-
-    - name: Create etc-pihole/ if Not Exist
+    - name: Create bind mounts
       file:
-        path: /home/rex/pihole/etc-pihole
+        path: "{{ item }}"
         state: directory
-      when: not etc_pihole_exist.stat.exists
-
-    - name: Check if etc-dnsmasq.d/ Exists
-      stat:
-        path: /home/rex/pihole/etc-dnsmasq.d
-      register: etc_dnsmasqd_exist
-
-    - name: Create etc-dnsmasq.d/ if Not Exist
-      file:
-        path: /home/rex/pihole/etc-dnsmasq.d
-        state: directory
-      when: not etc_dnsmasqd_exist.stat.exists
+      loop:
+        - /home/rex/pihole
+        - /home/rex/pihole/etc-pihole
+        - /home/rex/pihole/etc-dnsmasq.d
+      become: no
 
     - name: Start Pi-hole container
       docker_container:
