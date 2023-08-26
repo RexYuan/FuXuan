@@ -29,9 +29,23 @@
         regexp: '^   server string = .*'
         line: '   server string = rex_samba'
 
+    - name: Configure multi channel in smb.conf
+      blockinfile:
+        dest: /etc/samba/smb.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - multi channel"
+        insertbefore: '#### Networking ####'
+        block: |
+          {% set text = '''
+          server multi channel support = yes
+          aio read size = 1
+          aio write size = 1
+          ''' %}
+          {{ text | trim | indent(width=3, first=True) }}
+
     - name: Configure path in smb.conf
       blockinfile:
         dest: /etc/samba/smb.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - home path"
         block: |
           [Home]
              comment = Shared home
