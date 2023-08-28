@@ -17,6 +17,7 @@
     - name: Verify rclone installation
       command: rclone --version
       become: no
+      changed_when: False
 
     - name: Create rclone config file
       copy:

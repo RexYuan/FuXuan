@@ -16,6 +16,7 @@
 
     - name: Verify samba installation
       command: systemctl status smbd
+      changed_when: False
 
     - name: Configure workgroup in smb.conf
       lineinfile:

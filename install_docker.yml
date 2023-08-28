@@ -1,5 +1,5 @@
 ---
-- name: Install Docker on Ubuntu
+- name: Install Docker
   hosts: nuc
   become: true
 

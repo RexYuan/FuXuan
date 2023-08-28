@@ -22,11 +22,7 @@
       stat:
         path: /home/rex/Projects/FuXuan/ddns.sh
       register: ddns_script_exist
-
-    - name: Fail if ddns.sh Does Not Exist
-      fail:
-        msg: "The file '/home/rex/Projects/FuXuan/ddns.sh' does not exist"
-      when: not ddns_script_exist.stat.exists
+      failed_when: not ddns_script_exist.stat.exists
 
     - name: Add Cron Job
       cron:
