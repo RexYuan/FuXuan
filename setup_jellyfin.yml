@@ -42,7 +42,10 @@
         name: jellyfin
         image: jellyfin/jellyfin
         user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-        network_mode: host
+        # ports:
+        #   - "8096:8096/tcp"
+        # network_mode: host
+        # 8096
         volumes:
           - /etc/hosts:/tmp/hosts
           - /home/rex/jellyfin/config:/config
@@ -54,3 +57,6 @@
         env:
           JELLYFIN_PublishedServerUrl: http://nuc.rexyuan.com
         command: bash -c "cat /tmp/hosts >> /etc/hosts"
+        network_mode: bridge
+        networks:
+          - name: home_bridge

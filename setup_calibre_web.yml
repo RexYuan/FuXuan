@@ -35,15 +35,19 @@
         volumes:
           - "/home/rex/calibre/config:/config"
           - "/home/rex/calibre/books:/books"
-        ports:
-          - "8083:8083"
+        # ports:
+        #   - "8083:8083"
         restart_policy: unless-stopped
+        network_mode: bridge
+        networks:
+          - name: home_bridge
 
     - name: Wait for init
       community.docker.docker_container_exec:
         container: calibre
         command: |
           bash -c "while ! type calibredb &> /dev/null; do sleep 1; done;"
+      changed_when: False
 
     - name: Prepare database
       community.docker.docker_container_exec:

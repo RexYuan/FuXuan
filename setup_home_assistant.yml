@@ -15,22 +15,28 @@
 
     - name: Start Home Assistant Docker container
       docker_container:
-        name: homeassistant
+        name: home-assistant
         image: "ghcr.io/home-assistant/home-assistant:stable"
         volumes:
           - /home/rex/homeassistant/config:/config
           - /etc/localtime:/etc/localtime:ro
         restart_policy: unless-stopped
         privileged: true
+        # ports:
+        #   - "8123:8123/tcp"
         network_mode: host
+        # 8123
+        # network_mode: bridge
+        # networks:
+        #   - name: home_bridge
 
     - name: Install HACS
       community.docker.docker_container_exec:
-        container: homeassistant
+        container: home-assistant
         command: bash -c 'wget -O - https://get.hacs.xyz | bash -'
 
     - name: Restart container
       docker_container:
-        name: homeassistant
+        name: home-assistant
         restart: true
 

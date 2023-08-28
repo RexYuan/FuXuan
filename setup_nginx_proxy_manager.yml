@@ -27,3 +27,6 @@
           - /home/rex/nginxpm/data:/data
           - /home/rex/nginxpm/letsencrypt:/etc/letsencrypt
         restart_policy: unless-stopped
+        network_mode: bridge
+        networks:
+          - name: home_bridge

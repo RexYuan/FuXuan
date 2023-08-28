@@ -29,7 +29,7 @@
         - /home/rex/pihole/etc-dnsmasq.d
       become: no
 
-    - name: Start Pi-hole container
+    - name: Start Pihole container
       docker_container:
         name: pihole
         image: pihole/pihole:latest
@@ -37,7 +37,7 @@
           - "53:53/tcp"
           - "53:53/udp"
           - "67:67/udp"
-          - "8080:80/tcp"
+          # - "8888:80/tcp"
         env:
           TZ: 'Asia/Taipei'
           WEBPASSWORD: '{{ pihole_key }}'
@@ -47,6 +47,9 @@
         capabilities:
           - NET_ADMIN
         restart_policy: unless-stopped
+        network_mode: bridge
+        networks:
+          - name: home_bridge
 
   handlers:
     - name: Restart systemd-resolved
