@@ -1,0 +1,29 @@
+---
+- name: Set up NGINX proxy manager
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /home/rex/nginxpm
+        - /home/rex/nginxpm/data
+        - /home/rex/nginxpm/letsencrypt
+      become: no
+
+    - name: Create NGINX proxy manager container
+      docker_container:
+        name: nginx-proxy-manager
+        image: jc21/nginx-proxy-manager:latest
+        ports:
+          - "80:80"
+          - "81:81"
+          - "443:443"
+        volumes:
+          - /etc/hosts:/tmp/hosts
+          - /home/rex/nginxpm/data:/data
+          - /home/rex/nginxpm/letsencrypt:/etc/letsencrypt
+        restart_policy: unless-stopped
