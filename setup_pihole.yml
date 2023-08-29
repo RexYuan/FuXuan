@@ -37,7 +37,7 @@
           - "53:53/tcp"
           - "53:53/udp"
           - "67:67/udp"
-          # - "8888:80/tcp"
+          - "8888:80/tcp"
         env:
           TZ: 'Asia/Taipei'
           WEBPASSWORD: '{{ pihole_key }}'
@@ -47,9 +47,6 @@
         capabilities:
           - NET_ADMIN
         restart_policy: unless-stopped
-        network_mode: bridge
-        networks:
-          - name: home_bridge
 
   handlers:
     - name: Restart systemd-resolved
