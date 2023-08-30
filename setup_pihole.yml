@@ -11,13 +11,20 @@
         src: /run/systemd/resolve/resolv.conf
         dest: /etc/resolv.conf
         state: link
+      register: resolv_symlink
 
     - name: Disable DNSStubListener in resolved.conf
       lineinfile:
         dest: /etc/systemd/resolved.conf
         insertafter: '^#DNSStubListener='
         line: 'DNSStubListener=no'
-      notify: Restart systemd-resolved
+      register: resolv_listener
+
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
+      when: resolv_symlink.changed or resolv_listener.changed
 
     - name: Create bind mounts
       file:
@@ -37,7 +44,7 @@
           - "53:53/tcp"
           - "53:53/udp"
           - "67:67/udp"
-          - "8888:80/tcp"
+          - "8888:80/tcp" # admin panel
         env:
           TZ: 'Asia/Taipei'
           WEBPASSWORD: '{{ pihole_key }}'
@@ -47,9 +54,3 @@
         capabilities:
           - NET_ADMIN
         restart_policy: unless-stopped
-
-  handlers:
-    - name: Restart systemd-resolved
-      systemd:
-        name: systemd-resolved
-        state: restarted

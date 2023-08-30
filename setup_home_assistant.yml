@@ -22,8 +22,25 @@
           - /etc/localtime:/etc/localtime:ro
         restart_policy: unless-stopped
         privileged: true
-        network_mode: host
+        network_mode: host # admin panel port: 8123
+      notify:
+        - Install HACS
+        - Restart container
 
+    - name: Configure reverse proxy in configuration.yaml
+      blockinfile:
+        dest: /home/rex/home-assistant/config/configuration.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - reverse proxy"
+        block: |
+          {% set text = '''
+          http:
+          use_x_forwarded_for: true
+          trusted_proxies:
+          - 0.0.0.0/0
+          ''' %}
+          {{ text | trim | indent(width=2) }}
+
+  handlers:
     - name: Install HACS
       community.docker.docker_container_exec:
         container: home-assistant
