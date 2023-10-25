@@ -1,0 +1,26 @@
+---
+- name: Configure wifi over ethernet
+  hosts: nuc_eth
+  become: true
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install relevant packages
+      apt:
+        name: ['network-manager', 'net-tools', 'wireless-tools']
+
+    - name: Create wifi connection
+      community.general.nmcli:
+        type: wifi
+        conn_name: wlp1s0
+        ssid: yuan-crib
+        wifi_sec:
+          key-mgmt: wpa-psk
+          psk: "{{ crib_password }}"
+        autoconnect: true
+        state: present

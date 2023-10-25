@@ -1,6 +1,10 @@
-[nuc]
-192.168.0.103 ansible_port=7777
+[nuc_eth]
+192.168.0.163
 
-[nuc:vars]
-ansible_ssh_user=rex
+[nuc]
+192.168.0.103
+
+[all:vars]
+ansible_user=rex
+ansible_port=7777
 ansible_ssh_private_key_file=~/.ssh/id_rsa

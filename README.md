@@ -1,5 +1,11 @@
+Over ethernet:
 ```bash
 ./init.sh
+ansible-playbook configure_wifi.yml --ask-become-pass --extra-vars "ansible_ssh_port=22"
+```
+
+Over wifi:
+```bash
 ansible-playbook configure_ssh_port.yml --ask-become-pass --extra-vars "ansible_ssh_port=22"
 ansible-playbook blacklist_ite_cir.yml --ask-become-pass
 ansible-playbook resize_volume_fs.yml --ask-become-pass
