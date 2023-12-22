@@ -30,3 +30,4 @@
         network_mode: bridge
         networks:
           - name: home_bridge
+# use 172.17.0.1 instead of 127.0.0.1

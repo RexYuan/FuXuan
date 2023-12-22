@@ -1,7 +1,4 @@
 ---
-- import_playbook: install_rclone.yml
-  tags: copy
-
 - name: Set up Jellyfin
   hosts: nuc
   become: yes
@@ -20,16 +17,6 @@
         - /home/rex/jellyfin/fonts
       become: no
 
-    - name: Copy files using rclone - movies
-      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Movies /home/rex/jellyfin/movies
-      become: no
-      tags: copy
-
-    - name: Copy files using rclone - shows
-      command: rclone copy shared:/YingTing\ Wu/Rex/Jellyfin/Shows /home/rex/jellyfin/shows
-      become: no
-      tags: copy
-
     - name: Copy fonts
       copy:
         src: "{{ item }}"
@@ -42,10 +29,8 @@
         name: jellyfin
         image: jellyfin/jellyfin
         user: "{{ ansible_user_uid }}:{{ ansible_user_gid }}"
-        # ports:
-        #   - "8096:8096/tcp"
-        # network_mode: host
-        # 8096
+        ports:
+          - "8096:8096/tcp"
         volumes:
           - /etc/hosts:/tmp/hosts
           - /home/rex/jellyfin/config:/config
@@ -54,9 +39,4 @@
           - /home/rex/jellyfin/shows:/shows
           - /home/rex/jellyfin/fonts:/fonts
         restart_policy: unless-stopped
-        env:
-          JELLYFIN_PublishedServerUrl: http://nuc.rexyuan.com
         command: bash -c "cat /tmp/hosts >> /etc/hosts"
-        network_mode: bridge
-        networks:
-          - name: home_bridge

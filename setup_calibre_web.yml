@@ -1,7 +1,4 @@
 ---
-- import_playbook: install_rclone.yml
-  tags: copy
-
 - name: Set up Calibre-Web
   hosts: nuc
   become: yes
@@ -14,13 +11,8 @@
       loop:
         - /home/rex/calibre
         - /home/rex/calibre/config
-        - /home/rex/calibre/books
+        - /home/rex/calibre/books # put books here
       become: no
-
-    - name: Copy files using rclone - books
-      command: rclone copy shared:/YingTing\ Wu/Rex/Calibre/Books /home/rex/calibre/books
-      become: no
-      tags: copy
 
     - name: Deploy Calibre Web container
       docker_container:
@@ -35,12 +27,9 @@
         volumes:
           - "/home/rex/calibre/config:/config"
           - "/home/rex/calibre/books:/books"
-        # ports:
-        #   - "8083:8083"
+        ports:
+          - "8083:8083"
         restart_policy: unless-stopped
-        network_mode: bridge
-        networks:
-          - name: home_bridge
 
     - name: Wait for init
       community.docker.docker_container_exec:

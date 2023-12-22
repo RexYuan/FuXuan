@@ -1,0 +1,31 @@
+- name: Set up Immich
+  hosts: nuc
+  become: yes
+  vars_files:
+    - secret.yml
+
+  tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /home/rex/8tb/immich
+        - /home/rex/8tb/immich/pgdata
+        - /home/rex/8tb/immich/tsdata
+        - /home/rex/8tb/immich/model-cache
+        - /home/rex/8tb/immich/pictures
+      become: no
+
+    - name: Copy files
+      copy:
+        src: "{{ item }}"
+        dest: "/home/rex/8tb/{{ item }}"
+      loop:
+        - immich/.env
+        - immich/docker-compose.yml
+
+    - name: Run docker compose
+      command: docker compose up -d
+      args:
+        chdir: /home/rex/8tb/immich
