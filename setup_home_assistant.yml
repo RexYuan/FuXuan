@@ -40,6 +40,26 @@
           ''' %}
           {{ text | trim | indent(width=2) }}
 
+    - name: Configure HomeKit in configuration.yaml
+      blockinfile:
+        dest: /home/rex/home-assistant/config/configuration.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - homekit"
+        block: |
+          {% set text = '''
+          homekit:
+          filter:
+            include_entities:
+              # - switch.gt_axe16000_guest_6_ghz_2
+              - fan.zhimi_mb1_7a19_air_purifier
+              - sensor.zhimi_mb1_7a19_indoor_temperature
+              - sensor.zhimi_mb1_7a19_pm25_density
+              - sensor.zhimi_mb1_7a19_relative_humidity
+              - vacuum.ijai_v17_9a62_robot_cleaner
+              - switch.mmgg_fi1_ef52_feeding_measure
+              - switch.mmgg_wi11_54d9_pet_drinking_fountain
+          ''' %}
+          {{ text | trim | indent(width=2) }}
+
   handlers:
     - name: Install HACS
       community.docker.docker_container_exec:
