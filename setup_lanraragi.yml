@@ -21,7 +21,7 @@
         name: lanraragi
         image: difegue/lanraragi
         ports:
-          - "3003:3000"
+          - "7070:3000"
         volumes:
           - /home/rex/lanraragi/content:/home/koyomi/lanraragi/content
           - /home/rex/lanraragi/thumb:/home/koyomi/lanraragi/content/thumb
