@@ -1,0 +1,29 @@
+---
+- name: Set up LANraragi
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0777"
+      loop:
+        - /home/rex/lanraragi
+        - /home/rex/lanraragi/content
+        - /home/rex/lanraragi/thumb
+        - /home/rex/lanraragi/database
+      become: no
+
+    - name: Create LANraragi container
+      docker_container:
+        name: lanraragi
+        image: difegue/lanraragi
+        ports:
+          - "3003:3000"
+        volumes:
+          - /home/rex/lanraragi/content:/home/koyomi/lanraragi/content
+          - /home/rex/lanraragi/thumb:/home/koyomi/lanraragi/content/thumb
+          - /home/rex/lanraragi/database:/home/koyomi/lanraragi/database
+        restart_policy: unless-stopped
