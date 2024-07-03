@@ -11,10 +11,7 @@
         state: directory
       loop:
         - /home/rex/8tb/immich
-        - /home/rex/8tb/immich/pgdata
-        - /home/rex/8tb/immich/tsdata
         - /home/rex/8tb/immich/model-cache
-        - /home/rex/8tb/immich/pictures
       become: no
 
     - name: Copy files

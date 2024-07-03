@@ -27,3 +27,8 @@
           - /home/rex/lanraragi/thumb:/home/koyomi/lanraragi/content/thumb
           - /home/rex/lanraragi/database:/home/koyomi/lanraragi/database
         restart_policy: unless-stopped
+        healthcheck:
+          test: ["CMD", "wget", "--quiet", "--tries=1", "--no-check-certificate", "--spider", "http://lrr.lan"]
+          interval: 1m
+          timeout: 10s
+          retries: 3

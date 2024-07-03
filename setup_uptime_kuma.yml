@@ -1,0 +1,25 @@
+---
+- name: Set up Uptime Kuma
+  hosts: nuc
+  become: yes
+
+  tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /home/rex/kuma
+        - /home/rex/kuma/data
+      become: no
+
+    - name: Deploy Uptime Kuma container
+      docker_container:
+        name: uptime-kuma
+        image: louislam/uptime-kuma:1
+        volumes:
+          - "/home/rex/kuma/data:/app/data"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+        ports:
+          - "3001:3001"
+        restart_policy: unless-stopped
