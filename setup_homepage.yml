@@ -1,0 +1,230 @@
+---
+- name: Set up Homepage
+  hosts: nuc
+  become: yes
+
+  vars_files:
+    - homepage-assets/secret.yml
+
+  tasks:
+    - name: Create bind mounts
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - /home/rex/homepage
+        - /home/rex/homepage/config
+        - /home/rex/homepage/images
+        - /home/rex/homepage/icons
+      become: no
+
+    - name: Deploy Homepage container
+      docker_container:
+        name: homepage
+        image: ghcr.io/gethomepage/homepage:latest
+        volumes:
+          - "/home/rex/homepage/config:/app/config"
+          - "/home/rex/homepage/images:/app/public/images"
+          - "/home/rex/homepage/icons:/app/public/icons"
+          - "/var/run/docker.sock:/var/run/docker.sock"
+          - "/home/rex/8tb:/8tb:ro"
+          - "/mnt/nas:/nas:ro"
+        ports:
+          - "7071:3000"
+        restart_policy: unless-stopped
+
+    - name: Copy background
+      copy:
+        src: homepage-assets/background.jpg
+        dest: /home/rex/homepage/images/background.jpg
+
+    - name: Copy background
+      copy:
+        src: "homepage-assets/{{ item }}"
+        dest: "/home/rex/homepage/icons/{{ item }}"
+      loop:
+        - hpoi.png
+        - iis.png
+        - serializd.png
+        - backloggd.png
+        - serializd.png
+        - storygraph.png
+
+    - name: Configure settings.yaml
+      blockinfile:
+        dest: /home/rex/homepage/config/settings.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - settings.yaml"
+        block: |
+          title: Rex's Homepage
+          theme: dark # <----- add this line
+          color: neutral # <----- add this line
+          background:
+            image: /images/background.jpg
+            blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+            saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
+            brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
+            opacity: 75 # 0-100
+          layout:
+            Home:
+              style: row
+              columns: 3
+
+    - name: Configure bookmarks.yaml
+      copy:
+        content: |
+          - Work:
+            - ChatGPT:
+              - icon: chatgpt.svg
+                href: https://chatgpt.com/
+            - Github:
+                - icon: si-github-#FFFFFF
+                  href: https://github.com/
+            - Gmail (chihchengyuan):
+                - icon: gmail.svg
+                  href: https://mail.google.com/mail/u/0/#inbox
+            - Gmail (r1218r1218):
+                - icon: gmail.svg
+                  href: https://mail.google.com/mail/u/1/#inbox
+            - IIS Webmail:
+                - icon: /icons/iis.png
+                  href: https://webmail.iis.sinica.edu.tw/
+          - Social:
+            - Reddit:
+                - icon: reddit.svg
+                  href: https://reddit.com/
+            - Facebook:
+                - icon: facebook.svg
+                  href: https://www.facebook.com/
+            - Messenger:
+                - icon: facebook-messenger.svg
+                  href: https://www.messenger.com/
+            - Discord:
+                - icon: discord.svg
+                  href: https://discord.com/channels/539866293579415553/619217716678754304
+            - Instagram:
+                - icon: instagram.svg
+                  href: https://www.instagram.com/
+            - LinkedIn:
+                - icon: linkedin.svg
+                  href: https://www.linkedin.com/
+          - Entertainment:
+            - Medium:
+                - icon: si-medium-#FFFFFF
+                  href: https://medium.com/
+            - YouTube:
+                - icon: youtube.svg
+                  href: https://youtube.com/
+            - Netflix:
+                - icon: netflix.svg
+                  href: https://www.netflix.com/browse
+            - Bilibili:
+                - icon: si-bilibili-#00A1D6
+                  href: https://www.bilibili.com/
+          - Tracking:
+            - HPOi:
+                - icon: /icons/hpoi.png
+                  href: https://www.hpoi.net/user/444366
+            - backloggd:
+                - icon: /icons/backloggd.png
+                  href: https://www.backloggd.com/u/RexYuan
+            - AniList:
+                - icon: si-anilist-#02A9FF
+                  href: https://anilist.co/user/RexYuan
+            - Letterboxd:
+                - icon: si-letterboxd-#FFFFFF
+                  href: https://letterboxd.com/rexyuan/
+            - Serializd:
+                - icon: /icons/serializd.png
+                  href: https://www.serializd.com/user/RexYuan
+            - StoryGraph:
+                - icon: /icons/storygraph.png
+                  href: https://app.thestorygraph.com/profile/rexyuan
+        dest: /home/rex/homepage/config/bookmarks.yaml
+
+    - name: Configure services.yaml
+      copy:
+        content: |
+          - Home:
+            - Website:
+                  icon: mdi-home-account-#FFFFFF
+                  href: https://rexyuan.com/
+                  ping: rexyuan.com
+            - Router:
+                icon: si-republicofgamers-#FF0029
+                href: http://router.lan/
+            - Flashstor:
+                icon: asustor-data-master.svg
+                href: http://adm.lan/
+          - Library:
+            - Calibre-Web:
+                icon: calibre-web.svg
+                href: http://calibre.lan/
+                widget:
+                  type: calibreweb
+                  url: http://calibre.lan
+                  username: "{{CALIBRE_WEB_U}}"
+                  password: "{{CALIBRE_WEB_P}}"
+            - Immich:
+                icon: immich.svg
+                href: http://immich.lan/
+                widget:
+                  type: immich
+                  url: http://immich.lan
+                  key: "{{IMMICH_API_KEY}}"
+            - Jellyfin:
+                icon: jellyfin.svg
+                href: http://jellyfin.lan/
+                widget:
+                  type: jellyfin
+                  url: http://jellyfin.lan
+                  key: "{{JELLYFIN_API_KEY}}"
+                  enableBlocks: true # optional, defaults to false
+                  enableNowPlaying: true # optional, defaults to true
+                  enableUser: true # optional, defaults to false
+                  showEpisodeNumber: true # optional, defaults to false
+                  expandOneStreamToTwoRows: true # optional, defaults to true
+            - LANraragi:
+                icon: lanraragi.png
+                href: http://lrr.lan/
+          - Utility:
+            - Home Assistant:
+                icon: home-assistant.svg
+                href: http://ha.lan/
+            - Nginx Proxy Manager:
+                icon: nginx-proxy-manager.svg
+                href: http://nuc.lan:81/
+                widget:
+                  type: npm
+                  url: http://nuc.lan:81
+                  username: "{{NPM_U}}"
+                  password: "{{NPM_P}}"
+            - PiHole:
+                icon: pi-hole.svg
+                href: http://pihole.lan/admin/
+                widget:
+                  type: pihole
+                  url: http://pihole.lan
+                  key: "{{PIHOLE_API_KEY}}"
+            - Uptime Kuma:
+                icon: uptime-kuma.svg
+                href: http://kuma.lan
+                widget:
+                  type: uptimekuma
+                  url: http://kuma.lan
+                  slug: homepage
+        dest: /home/rex/homepage/config/services.yaml
+
+    - name: Configure widgets.yaml
+      copy:
+        content: |
+          - resources:
+              cpu: true
+              memory: true
+              cputemp: true
+              uptime: true
+          - resources:
+              disk:
+                - /
+                - /8tb
+                - /nas
+        dest: /home/rex/homepage/config/widgets.yaml

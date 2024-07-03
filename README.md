@@ -21,4 +21,5 @@ ansible-playbook setup_immich.yml --ask-become-pass
 # ansible-playbook setup_grafana.yml --ask-become-pass
 ansible-playbook setup_lanraragi.yml --ask-become-pass
 ansible-playbook setup_uptime_kuma.yml --ask-become-pass
+ansible-playbook setup_homepage.yml --ask-become-pass
 ```
