@@ -49,6 +49,7 @@
         - backloggd.png
         - serializd.png
         - storygraph.png
+        - baha.png
 
     - name: Configure settings.yaml
       blockinfile:
@@ -65,6 +66,10 @@
             brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
             opacity: 75 # 0-100
           layout:
+            Work:
+            Social:
+            Entertainment:
+            Tracking:
             Home:
               style: row
               columns: 3
@@ -120,6 +125,9 @@
             - Bilibili:
                 - icon: si-bilibili-#00A1D6
                   href: https://www.bilibili.com/
+            - 動畫瘋:
+                - icon: /icons/baha.png
+                  href: https://ani.gamer.com.tw/
           - Tracking:
             - HPOi:
                 - icon: /icons/hpoi.png
