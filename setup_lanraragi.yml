@@ -8,12 +8,12 @@
       file:
         path: "{{ item }}"
         state: directory
-        mode: "0777"
+        mode: "0755"
       loop:
-        - /home/rex/lanraragi
-        - /home/rex/lanraragi/content
-        - /home/rex/lanraragi/thumb
-        - /home/rex/lanraragi/database
+        - /home/rex/8tb/lanraragi
+        - /home/rex/8tb/lanraragi/content
+        - /home/rex/8tb/lanraragi/thumb
+        - /home/rex/8tb/lanraragi/database
       become: no
 
     - name: Create LANraragi container
@@ -23,9 +23,9 @@
         ports:
           - "7070:3000"
         volumes:
-          - /home/rex/lanraragi/content:/home/koyomi/lanraragi/content
-          - /home/rex/lanraragi/thumb:/home/koyomi/lanraragi/content/thumb
-          - /home/rex/lanraragi/database:/home/koyomi/lanraragi/database
+          - /home/rex/8tb/lanraragi/content:/home/koyomi/lanraragi/content
+          - /home/rex/8tb/lanraragi/thumb:/home/koyomi/lanraragi/content/thumb
+          - /home/rex/8tb/lanraragi/database:/home/koyomi/lanraragi/database
         restart_policy: unless-stopped
         healthcheck:
           test: ["CMD", "wget", "--quiet", "--tries=1", "--no-check-certificate", "--spider", "http://lrr.lan"]

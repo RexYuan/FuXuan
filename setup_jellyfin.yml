@@ -9,18 +9,18 @@
         path: "{{ item }}"
         state: directory
       loop:
-        - /home/rex/jellyfin
-        - /home/rex/jellyfin/config
-        - /home/rex/jellyfin/cache
-        - /home/rex/jellyfin/movies
-        - /home/rex/jellyfin/shows
-        - /home/rex/jellyfin/fonts
+        - /home/rex/8tb/jellyfin
+        - /home/rex/8tb/jellyfin/config
+        - /home/rex/8tb/jellyfin/cache
+        - /home/rex/8tb/jellyfin/movies
+        - /home/rex/8tb/jellyfin/shows
+        - /home/rex/8tb/jellyfin/fonts
       become: no
 
     - name: Copy fonts
       copy:
         src: "{{ item }}"
-        dest: /home/rex/jellyfin/fonts
+        dest: /home/rex/8tb/jellyfin/fonts
       with_fileglob:
         - "/Users/rexyuan/Projects/FuXuan/Noto_Sans_TC/static/*"
 
@@ -33,10 +33,10 @@
           - "8096:8096/tcp"
         volumes:
           - /etc/hosts:/tmp/hosts
-          - /home/rex/jellyfin/config:/config
-          - /home/rex/jellyfin/cache:/cache
-          - /home/rex/jellyfin/movies:/movies
-          - /home/rex/jellyfin/shows:/shows
-          - /home/rex/jellyfin/fonts:/fonts
+          - /home/rex/8tb/jellyfin/config:/config
+          - /home/rex/8tb/jellyfin/cache:/cache
+          - /home/rex/8tb/jellyfin/movies:/movies
+          - /home/rex/8tb/jellyfin/shows:/shows
+          - /home/rex/8tb/jellyfin/fonts:/fonts
         restart_policy: unless-stopped
         command: bash -c "cat /tmp/hosts >> /etc/hosts"
