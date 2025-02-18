@@ -161,7 +161,7 @@
                 icon: si-republicofgamers-#FF0029
                 href: http://router.lan/
             - Flashstor:
-                icon: asustor-data-master.svg
+                icon: asustor.svg
                 href: http://adm.lan/
           - Library:
             - Calibre-Web:
