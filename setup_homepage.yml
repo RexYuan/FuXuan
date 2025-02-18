@@ -73,6 +73,9 @@
             Home:
               style: row
               columns: 3
+            nuc status:
+              style: row
+              columns: 6
 
     - name: Configure bookmarks.yaml
       copy:
@@ -225,14 +228,20 @@
     - name: Configure widgets.yaml
       copy:
         content: |
-          - resources:
+          - glances:
+              url: http://nuc.lan:61208
+              version: 4
               cpu: true
-              memory: true
+              mem: false
               cputemp: true
-              uptime: true
-          - resources:
-              disk:
-                - /
-                - /8tb
-                - /nas
+              uptime: false
+              label: nuc
+          - glances:
+              url: http://flashstor.lan:61208
+              version: 4
+              cpu: true
+              mem: false
+              cputemp: true
+              uptime: false
+              label: flashstor
         dest: /home/rex/homepage/config/widgets.yaml
