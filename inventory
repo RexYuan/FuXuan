@@ -1,8 +1,8 @@
-[nuc_eth]
-192.168.50.24
-
 [nuc]
-192.168.50.24
+192.168.50.24 ansible_python_interpreter=/usr/bin/python3.10
+
+[flashstor]
+192.168.50.95 ansible_port=7778 ansible_python_interpreter=/opt/bin/python3.11
 
 [all:vars]
 ansible_user=rex

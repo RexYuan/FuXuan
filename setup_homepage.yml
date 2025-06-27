@@ -27,8 +27,6 @@
           - "/home/rex/homepage/images:/app/public/images"
           - "/home/rex/homepage/icons:/app/public/icons"
           - "/var/run/docker.sock:/var/run/docker.sock"
-          - "/home/rex/8tb:/8tb:ro"
-          - "/mnt/nas:/nas:ro"
         ports:
           - "7071:3000"
         restart_policy: unless-stopped
@@ -235,6 +233,7 @@
               mem: false
               cputemp: true
               uptime: false
+              disk: /home/rex/8tb
               label: nuc
           - glances:
               url: http://flashstor.lan:61208
@@ -243,5 +242,6 @@
               mem: false
               cputemp: true
               uptime: false
+              disk: /volume1
               label: flashstor
         dest: /home/rex/homepage/config/widgets.yaml

@@ -1,0 +1,87 @@
+---
+- name: Set up Glances on NUC and NAS
+  hosts: nuc,flashstor
+
+  tasks:
+    # ---------- NUC (Ubuntu Server) ----------
+    - name: Install Glances via pip (nuc)
+      pip:
+        name:
+          - glances
+          - bottle
+        state: latest
+        extra_args: --user
+      when: "'nuc' in group_names"
+
+    - name: Ensure Glances @reboot cron job is present (nuc)
+      cron:
+        name: "Start Glances at reboot"
+        user: rex
+        special_time: reboot
+        job: "nohup /home/rex/.local/bin/glances -w > /dev/null 2>&1 &"
+      when: "'nuc' in group_names"
+
+    - name: Stop Glances if running (nuc)
+      shell: |
+        if pgrep -f "[g]lances -w" > /dev/null; then
+          pkill -f "[g]lances -w"
+          exit 0
+        else
+          echo "No Glances process found."
+          exit 42
+        fi
+      register: glances_stop_nuc
+      changed_when: glances_stop_nuc.rc == 0
+      failed_when: glances_stop_nuc.rc not in [0, 42]
+      when: "'nuc' in group_names"
+
+    - name: Start Glances now (nuc)
+      shell: nohup /home/rex/.local/bin/glances -w > /dev/null 2>&1 &
+      when: "'nuc' in group_names"
+
+    # ---------- FLASHSTOR (Entware + ADM) ----------
+    - name: Install Glances via pip (flashstor)
+      command: /opt/bin/pip3 install --upgrade glances bottle
+      register: glances_install
+      changed_when: >
+        'Successfully installed' in glances_install.stdout or
+        'Requirement already satisfied' not in glances_install.stdout
+      when: "'flashstor' in group_names"
+
+    - name: Install Entware init.d Glances service script (flashstor)
+      copy:
+        dest: /opt/etc/init.d/S99glances
+        mode: "0755"
+        content: |
+          #!/bin/sh
+          # Start Glances with PID tracking
+
+          PIDFILE=/opt/var/run/glances.pid
+          LOGFILE=/opt/var/log/glances.log
+
+          case "$1" in
+            start)
+              echo "Starting Glances..."
+              mkdir -p /opt/var/run
+              mkdir -p /opt/var/log
+              nohup /opt/bin/python3 -m glances -w > "$LOGFILE" 2>&1 &
+              echo $! > "$PIDFILE"
+              ;;
+            stop)
+              echo "Stopping Glances..."
+              [ -f "$PIDFILE" ] && kill "$(cat "$PIDFILE")" && rm -f "$PIDFILE"
+              ;;
+            *)
+              echo "Usage: $0 {start|stop}"
+              ;;
+          esac
+      when: "'flashstor' in group_names"
+
+    - name: Stop any running Glances (flashstor)
+      command: /opt/etc/init.d/S99glances stop
+      ignore_errors: true
+      when: "'flashstor' in group_names"
+
+    - name: Start Glances (flashstor)
+      command: /opt/etc/init.d/S99glances start
+      when: "'flashstor' in group_names"
