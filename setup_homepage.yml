@@ -30,13 +30,16 @@
         ports:
           - "7071:3000"
         restart_policy: unless-stopped
+        env:
+          HOMEPAGE_ALLOWED_HOSTS: "*"
 
     - name: Copy background
       copy:
-        src: homepage-assets/background.jpg
-        dest: /home/rex/homepage/images/background.jpg
+        src: homepage-assets/waneella.png
+        dest: /home/rex/homepage/images/waneella.png
+      notify: Restart Homepage container
 
-    - name: Copy background
+    - name: Copy icons
       copy:
         src: "homepage-assets/{{ item }}"
         dest: "/home/rex/homepage/icons/{{ item }}"
@@ -48,6 +51,7 @@
         - serializd.png
         - storygraph.png
         - baha.png
+      notify: Restart Homepage container
 
     - name: Configure settings.yaml
       blockinfile:
@@ -58,49 +62,58 @@
           theme: dark # <----- add this line
           color: neutral # <----- add this line
           background:
-            image: /images/background.jpg
-            blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
+            image: /images/waneella.png
+            # blur: sm # sm, "", md, xl... see https://tailwindcss.com/docs/backdrop-blur
             saturate: 75 # 0, 50, 100... see https://tailwindcss.com/docs/backdrop-saturate
             brightness: 75 # 0, 50, 75... see https://tailwindcss.com/docs/backdrop-brightness
             opacity: 75 # 0-100
           layout:
-            Work:
+            AI:
             Social:
             Entertainment:
             Tracking:
             Home:
               style: row
               columns: 3
-            nuc status:
-              style: row
-              columns: 6
 
     - name: Configure bookmarks.yaml
       copy:
         content: |
-          - Work:
+          - AI:
             - ChatGPT:
               - icon: chatgpt.svg
                 href: https://chatgpt.com/
-            - Github:
-                - icon: si-github-#FFFFFF
-                  href: https://github.com/
-            - Gmail (chihchengyuan):
-                - icon: gmail.svg
-                  href: https://mail.google.com/mail/u/0/#inbox
-            - Gmail (r1218r1218):
-                - icon: gmail.svg
-                  href: https://mail.google.com/mail/u/1/#inbox
-            - IIS Webmail:
-                - icon: /icons/iis.png
-                  href: https://webmail.iis.sinica.edu.tw/
+            - Claude:
+              - icon: claude-ai.svg
+                href: https://claude.ai/
+            - Gemini:
+              - icon: google-gemini.svg
+                href: https://gemini.google.com/
+            - Deepseek:
+              - icon: deepseek.svg
+                href: https://chat.deepseek.com/
+            - Perplexity:
+              - icon: sh-perplexity-ai-light.svg
+                href: https://www.perplexity.ai/
+            # - Github:
+            #     - icon: si-github-#FFFFFF
+            #       href: https://github.com/
+            # - Gmail (main):
+            #     - icon: gmail.svg
+            #       href: https://mail.google.com/mail/u/0/#inbox
+            # - Gmail (backup):
+            #     - icon: gmail.svg
+            #       href: https://mail.google.com/mail/u/1/#inbox
+            # - IIS Webmail:
+            #     - icon: /icons/iis.png
+            #       href: https://webmail.iis.sinica.edu.tw/
           - Social:
             - Reddit:
                 - icon: reddit.svg
                   href: https://reddit.com/
-            - Facebook:
-                - icon: facebook.svg
-                  href: https://www.facebook.com/
+            # - Facebook:
+            #     - icon: facebook.svg
+            #       href: https://www.facebook.com/
             - Messenger:
                 - icon: facebook-messenger.svg
                   href: https://www.messenger.com/
@@ -145,9 +158,9 @@
             - Serializd:
                 - icon: /icons/serializd.png
                   href: https://www.serializd.com/user/RexYuan
-            - StoryGraph:
-                - icon: /icons/storygraph.png
-                  href: https://app.thestorygraph.com/profile/rexyuan
+            # - StoryGraph:
+            #     - icon: /icons/storygraph.png
+            #       href: https://app.thestorygraph.com/profile/rexyuan
         dest: /home/rex/homepage/config/bookmarks.yaml
 
     - name: Configure services.yaml
@@ -155,7 +168,7 @@
         content: |
           - Home:
             - Website:
-                  icon: mdi-home-account-#FFFFFF
+                  icon: mdi-card-account-details-#BA68C8
                   href: https://rexyuan.com/
                   ping: rexyuan.com
             - Router:
@@ -164,6 +177,39 @@
             - Flashstor:
                 icon: asustor.svg
                 href: http://adm.lan/
+            - Power:
+                icon: mdi-lightning-bolt-#FFC107
+                widget:
+                  type: homeassistant
+                  url: http://ha.lan
+                  key: {{HA_API_KEY}}
+                  custom:
+                    - state: sensor.shelf_power_rounded
+                      label: Shelf
+                    - state: sensor.desk_power_rounded
+                      label: Desk
+            - Pet:
+                icon: mdi-cat-#C19A6B
+                widget:
+                  type: homeassistant
+                  url: http://ha.lan
+                  key: {{HA_API_KEY}}
+                  custom:
+                    - state: sensor.pet_food_level
+                      label: Food
+                    - state: sensor.pet_water_level
+                      label: Water
+            - Network:
+                icon: mdi-web-#00BCD4
+                widget:
+                  type: homeassistant
+                  url: http://ha.lan
+                  key: {{HA_API_KEY}}
+                  custom:
+                    - state: sensor.wan_download_speed
+                      label: Download
+                    - state: sensor.wan_upload_speed
+                      label: Upload
           - Library:
             - Calibre-Web:
                 icon: calibre-web.svg
@@ -188,7 +234,7 @@
                   url: http://jellyfin.lan
                   key: "{{JELLYFIN_API_KEY}}"
                   enableBlocks: true # optional, defaults to false
-                  enableNowPlaying: true # optional, defaults to true
+                  enableNowPlaying: false # optional, defaults to true
                   enableUser: true # optional, defaults to false
                   showEpisodeNumber: true # optional, defaults to false
                   expandOneStreamToTwoRows: true # optional, defaults to true
@@ -196,9 +242,6 @@
                 icon: lanraragi.png
                 href: http://lrr.lan/
           - Utility:
-            - Home Assistant:
-                icon: home-assistant.svg
-                href: http://ha.lan/
             - Nginx Proxy Manager:
                 icon: nginx-proxy-manager.svg
                 href: http://nuc.lan:81/
@@ -221,6 +264,9 @@
                   type: uptimekuma
                   url: http://kuma.lan
                   slug: homepage
+            - Home Assistant:
+                icon: home-assistant.svg
+                href: http://ha.lan/
         dest: /home/rex/homepage/config/services.yaml
 
     - name: Configure widgets.yaml
@@ -234,7 +280,16 @@
               cputemp: true
               uptime: false
               disk: /home/rex/8tb
-              label: nuc
+              label: NUC
+          - glances:
+              url: http://ms01.lan:61208
+              version: 4
+              cpu: true
+              mem: false
+              cputemp: true
+              uptime: false
+              disk: /mnt/16tb
+              label: MS-01
           - glances:
               url: http://flashstor.lan:61208
               version: 4
@@ -243,5 +298,21 @@
               cputemp: true
               uptime: false
               disk: /volume1
-              label: flashstor
+              label: Flashstor
+          - openmeteo:
+              label: Taipei # optional
+              latitude: 25.051986
+              longitude: 121.533112
+              timezone: Asia/Taipei # optional
+              units: metric # or imperial
+              cache: 5 # Time in minutes to cache API responses, to stay within limits
+              format: # optional, Intl.NumberFormat options
+                maximumFractionDigits: 0
         dest: /home/rex/homepage/config/widgets.yaml
+
+  handlers:
+    - name: Restart Homepage container
+      docker_container:
+        name: homepage
+        state: started
+        restart: true

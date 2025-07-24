@@ -24,8 +24,7 @@
         privileged: true
         network_mode: host # admin panel port: 8123
       notify:
-        - Install HACS
-        - Restart container
+        - ha_poststart
 
     - name: Configure reverse proxy in configuration.yaml
       blockinfile:
@@ -60,13 +59,94 @@
           ''' %}
           {{ text | trim | indent(width=2) }}
 
+    - name: Configure templates in configuration.yaml for gethomepage
+      blockinfile:
+        dest: /home/rex/home-assistant/config/configuration.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - template"
+        block: |
+          {% raw %}
+          template:
+            - sensor:
+                - name: "Shelf Power Rounded"
+                  unique_id: shelf_power_rounded
+                  unit_of_measurement: "W"
+                  state_class: measurement
+                  device_class: power
+                  state: >
+                    {{ states('sensor.qmi_tw02_8522_electric_power') | float | round(0) | int }}
+                - name: "Desk Power Rounded"
+                  unique_id: desk_power_rounded
+                  unit_of_measurement: "W"
+                  state_class: measurement
+                  device_class: power
+                  state: >
+                    {{ states('sensor.qmi_2a1c1_87df_electric_power') | float | round(0) | int }}
+                - name: "Pet Food Level"
+                  unique_id: pet_food_level
+                  state: >
+                    {% set level = state_attr('sensor.mmgg_fi1_ef52_pet_feeder', 'pet_feeder.pet_food_left_level') | int(-1) %}
+                    {% if level in [1, 2] %}
+                      Low
+                    {% else %}
+                      Normal
+                    {% endif %}
+                - name: "Pet Water Level"
+                  unique_id: pet_water_level
+                  state: >
+                    {% if is_state('binary_sensor.mmgg_wi11_54d9_no_water_flag', 'on') %}
+                      Low
+                    {% else %}
+                      Normal
+                    {% endif %}
+                - name: "WAN Download Speed"
+                  unique_id: wan_download_speed
+                  unit_of_measurement: "Mb/s"
+                  device_class: data_rate
+                  state_class: measurement
+                  state: >
+                    {{ states('sensor.gt_axe16000_wan_download_speed') | float(0) | round(2) }}
+                - name: "WAN Upload Speed"
+                  unique_id: wan_upload_speed
+                  unit_of_measurement: "Mb/s"
+                  device_class: data_rate
+                  state_class: measurement
+                  state: >
+                    {{ states('sensor.gt_axe16000_wan_upload_speed') | float(0) | round(2) }}
+          {% endraw %}
+
   handlers:
-    - name: Install HACS
+    - name: Wait for Home Assistant to be healthy
+      become: true
       community.docker.docker_container_exec:
         container: home-assistant
-        command: bash -c 'wget -O - https://get.hacs.xyz | bash -'
+        command: >
+          sh -c '
+            for i in $(seq 1 60); do
+              if curl -sf http://localhost:8123/ | grep -q "<title>Home Assistant</title>"; then
+                exit 0;
+              fi
+              sleep 1;
+            done
+            exit 1
+          '
+      listen: ha_poststart
+      notify: install_hacs
 
-    - name: Restart container
+    - name: Install HACS
+      become: true
+      community.docker.docker_container_exec:
+        container: home-assistant
+        command: >
+          sh -c '
+            apk add git || exit 1
+            wget -O - https://install.hacs.xyz | bash - || exit 1
+          '
+      listen: install_hacs
+      notify: restart_ha_after_hacs
+
+    - name: Restart Home Assistant container
+      become: true
       docker_container:
         name: home-assistant
         restart: true
+      listen: restart_ha_after_hacs
