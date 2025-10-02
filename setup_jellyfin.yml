@@ -38,5 +38,7 @@
           - /home/rex/8tb/jellyfin/movies:/movies
           - /home/rex/8tb/jellyfin/shows:/shows
           - /home/rex/8tb/jellyfin/fonts:/fonts
+        devices:
+          - /dev/dri:/dev/dri
         restart_policy: unless-stopped
         command: bash -c "cat /tmp/hosts >> /etc/hosts"

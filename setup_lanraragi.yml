@@ -14,12 +14,11 @@
         - /home/rex/8tb/lanraragi/content
         - /home/rex/8tb/lanraragi/thumb
         - /home/rex/8tb/lanraragi/database
-      become: no
 
     - name: Create LANraragi container
       docker_container:
         name: lanraragi
-        image: difegue/lanraragi
+        image: difegue/lanraragi:v.0.9.50
         ports:
           - "7070:3000"
         volumes:

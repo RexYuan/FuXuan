@@ -45,11 +45,9 @@
         dest: "/home/rex/homepage/icons/{{ item }}"
       loop:
         - hpoi.png
-        - iis.png
         - serializd.png
         - backloggd.png
         - serializd.png
-        - storygraph.png
         - baha.png
       notify: Restart Homepage container
 
@@ -95,25 +93,10 @@
             - Perplexity:
               - icon: sh-perplexity-ai-light.svg
                 href: https://www.perplexity.ai/
-            # - Github:
-            #     - icon: si-github-#FFFFFF
-            #       href: https://github.com/
-            # - Gmail (main):
-            #     - icon: gmail.svg
-            #       href: https://mail.google.com/mail/u/0/#inbox
-            # - Gmail (backup):
-            #     - icon: gmail.svg
-            #       href: https://mail.google.com/mail/u/1/#inbox
-            # - IIS Webmail:
-            #     - icon: /icons/iis.png
-            #       href: https://webmail.iis.sinica.edu.tw/
           - Social:
             - Reddit:
                 - icon: reddit.svg
                   href: https://reddit.com/
-            # - Facebook:
-            #     - icon: facebook.svg
-            #       href: https://www.facebook.com/
             - Messenger:
                 - icon: facebook-messenger.svg
                   href: https://www.messenger.com/
@@ -158,9 +141,6 @@
             - Serializd:
                 - icon: /icons/serializd.png
                   href: https://www.serializd.com/user/RexYuan
-            # - StoryGraph:
-            #     - icon: /icons/storygraph.png
-            #       href: https://app.thestorygraph.com/profile/rexyuan
         dest: /home/rex/homepage/config/bookmarks.yaml
 
     - name: Configure services.yaml
@@ -184,7 +164,7 @@
                   url: http://ha.lan
                   key: {{HA_API_KEY}}
                   custom:
-                    - state: sensor.shelf_power_rounded
+                    - state: sensor.ups_current_power_rounded
                       label: Shelf
                     - state: sensor.desk_power_rounded
                       label: Desk
@@ -281,15 +261,15 @@
               uptime: false
               disk: /home/rex/8tb
               label: NUC
-          - glances:
-              url: http://ms01.lan:61208
-              version: 4
-              cpu: true
-              mem: false
-              cputemp: true
-              uptime: false
-              disk: /mnt/16tb
-              label: MS-01
+          # - glances:
+          #     url: http://ms01.lan:61208
+          #     version: 4
+          #     cpu: true
+          #     mem: false
+          #     cputemp: true
+          #     uptime: false
+          #     disk: /mnt/16tb
+          #     label: MS-01
           - glances:
               url: http://flashstor.lan:61208
               version: 4
@@ -299,15 +279,6 @@
               uptime: false
               disk: /volume1
               label: Flashstor
-          - openmeteo:
-              label: Taipei # optional
-              latitude: 25.051986
-              longitude: 121.533112
-              timezone: Asia/Taipei # optional
-              units: metric # or imperial
-              cache: 5 # Time in minutes to cache API responses, to stay within limits
-              format: # optional, Intl.NumberFormat options
-                maximumFractionDigits: 0
         dest: /home/rex/homepage/config/widgets.yaml
 
   handlers:

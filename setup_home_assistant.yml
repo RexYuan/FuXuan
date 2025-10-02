@@ -11,6 +11,7 @@
       loop:
         - /home/rex/home-assistant
         - /home/rex/home-assistant/config
+        - /home/rex/home-assistant/config/dashboards
       become: no
 
     - name: Start Home Assistant Docker container
@@ -39,79 +40,207 @@
           ''' %}
           {{ text | trim | indent(width=2) }}
 
-    - name: Configure HomeKit in configuration.yaml
-      blockinfile:
-        dest: /home/rex/home-assistant/config/configuration.yaml
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - homekit"
-        block: |
-          {% set text = '''
-          homekit:
-          filter:
-            include_entities:
-              # - switch.gt_axe16000_guest_6_ghz_2
-              - fan.zhimi_mb1_7a19_air_purifier
-              - sensor.zhimi_mb1_7a19_indoor_temperature
-              - sensor.zhimi_mb1_7a19_pm25_density
-              - sensor.zhimi_mb1_7a19_relative_humidity
-              - vacuum.ijai_v17_9a62_robot_cleaner
-              - switch.mmgg_fi1_ef52_feeding_measure
-              - switch.mmgg_wi11_54d9_pet_drinking_fountain
-          ''' %}
-          {{ text | trim | indent(width=2) }}
+    # - name: Configure HomeKit in configuration.yaml
+    #   blockinfile:
+    #     dest: /home/rex/home-assistant/config/configuration.yaml
+    #     marker: "# {mark} ANSIBLE MANAGED BLOCK - homekit"
+    #     block: |
+    #       {% set text = '''
+    #       homekit:
+    #       filter:
+    #         include_entities:
+    #           # - switch.gt_axe16000_guest_6_ghz_2
+    #           - fan.zhimi_mb1_7a19_air_purifier
+    #           - sensor.zhimi_mb1_7a19_indoor_temperature
+    #           - sensor.zhimi_mb1_7a19_pm25_density
+    #           - sensor.zhimi_mb1_7a19_relative_humidity
+    #           - vacuum.ijai_v17_9a62_robot_cleaner
+    #           - switch.mmgg_fi1_ef52_feeding_measure
+    #           - switch.mmgg_wi11_54d9_pet_drinking_fountain
+    #       ''' %}
+    #       {{ text | trim | indent(width=2) }}
 
-    - name: Configure templates in configuration.yaml for gethomepage
+    - name: Configure templates in configuration.yaml
       blockinfile:
         dest: /home/rex/home-assistant/config/configuration.yaml
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - template"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - templates"
         block: |
           {% raw %}
           template:
             - sensor:
-                - name: "Shelf Power Rounded"
-                  unique_id: shelf_power_rounded
-                  unit_of_measurement: "W"
-                  state_class: measurement
-                  device_class: power
-                  state: >
-                    {{ states('sensor.qmi_tw02_8522_electric_power') | float | round(0) | int }}
-                - name: "Desk Power Rounded"
-                  unique_id: desk_power_rounded
-                  unit_of_measurement: "W"
-                  state_class: measurement
-                  device_class: power
-                  state: >
-                    {{ states('sensor.qmi_2a1c1_87df_electric_power') | float | round(0) | int }}
-                - name: "Pet Food Level"
-                  unique_id: pet_food_level
-                  state: >
-                    {% set level = state_attr('sensor.mmgg_fi1_ef52_pet_feeder', 'pet_feeder.pet_food_left_level') | int(-1) %}
-                    {% if level in [1, 2] %}
-                      Low
-                    {% else %}
-                      Normal
-                    {% endif %}
-                - name: "Pet Water Level"
-                  unique_id: pet_water_level
-                  state: >
-                    {% if is_state('binary_sensor.mmgg_wi11_54d9_no_water_flag', 'on') %}
-                      Low
-                    {% else %}
-                      Normal
-                    {% endif %}
-                - name: "WAN Download Speed"
-                  unique_id: wan_download_speed
-                  unit_of_measurement: "Mb/s"
-                  device_class: data_rate
-                  state_class: measurement
-                  state: >
-                    {{ states('sensor.gt_axe16000_wan_download_speed') | float(0) | round(2) }}
-                - name: "WAN Upload Speed"
-                  unique_id: wan_upload_speed
-                  unit_of_measurement: "Mb/s"
-                  device_class: data_rate
-                  state_class: measurement
-                  state: >
-                    {{ states('sensor.gt_axe16000_wan_upload_speed') | float(0) | round(2) }}
+              # UPS stuff
+              - name: "UPS Current Power"
+                unique_id: ups_current_power
+                unit_of_measurement: "W"
+                device_class: power
+                state_class: measurement
+                state: >
+                  {{ (states('sensor.ups_load') | float * 0.01) *
+                     (states('sensor.asustor_nominal_real_power') | float) }}
+              - name: "UPS Current Power Rounded"
+                unique_id: ups_current_power_rounded
+                unit_of_measurement: "W"
+                device_class: power
+                state_class: measurement
+                state: >
+                  {{ ((states('sensor.ups_load') | float * 0.01) *
+                      (states('sensor.asustor_nominal_real_power') | float)) | round | int }}
+              - name: "UPS Remaining Runtime"
+                unique_id: ups_remaining_runtime_hms
+                state: >
+                  {% set secs = states('sensor.asustor_battery_runtime') | int(0) %}
+                  {% set h = (secs // 3600) %}
+                  {% set m = ((secs % 3600) // 60) %}
+                  {% set s = (secs % 60) %}
+                  {{ '{:02d}:{:02d}:{:02d}'.format(h, m, s) }}
+
+              # Xiaomi stuff
+              - name: "Desk Power Rounded"
+                unique_id: desk_power_rounded
+                unit_of_measurement: "W"
+                state_class: measurement
+                device_class: power
+                state: >
+                  {{ states('sensor.qmi_2a1c1_87df_electric_power') | float | round(0) | int }}
+              - name: "Pet Food Level"
+                unique_id: pet_food_level
+                state: >
+                  {% set level = state_attr('sensor.mmgg_fi1_ef52_pet_feeder', 'pet_feeder.pet_food_left_level') | int(-1) %}
+                  {% if level in [1, 2] %}
+                    Low
+                  {% else %}
+                    Normal
+                  {% endif %}
+              - name: "Pet Water Level"
+                unique_id: pet_water_level
+                state: >
+                  {% if is_state('binary_sensor.mmgg_wi11_54d9_no_water_flag', 'on') %}
+                    Low
+                  {% else %}
+                    Normal
+                  {% endif %}
+
+              # Router stuff
+              - name: "WAN Download Speed"
+                unique_id: wan_download_speed
+                unit_of_measurement: "Mb/s"
+                device_class: data_rate
+                state_class: measurement
+                state: >
+                  {{ states('sensor.gt_axe16000_wan_download_speed') | float(0) | round(2) }}
+              - name: "WAN Upload Speed"
+                unique_id: wan_upload_speed
+                unit_of_measurement: "Mb/s"
+                device_class: data_rate
+                state_class: measurement
+                state: >
+                  {{ states('sensor.gt_axe16000_wan_upload_speed') | float(0) | round(2) }}
+          {% endraw %}
+
+    - name: Configure utility_meter in configuration.yaml
+      blockinfile:
+        dest: /home/rex/home-assistant/config/configuration.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - utility_meter"
+        block: |
+          {% raw %}
+          utility_meter:
+            ups_power_daily:
+              source: sensor.ups_current_power
+              cycle: daily
+            ups_power_weekly:
+              source: sensor.ups_current_power
+              cycle: weekly
+            ups_power_monthly:
+              source: sensor.ups_current_power
+              cycle: monthly
+            ups_power_yearly:
+              source: sensor.ups_current_power
+              cycle: yearly
+          {% endraw %}
+
+    - name: Configure lovelace in configuration.yaml
+      blockinfile:
+        dest: /home/rex/home-assistant/config/configuration.yaml
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - lovelace"
+        block: |
+          {% raw %}
+          lovelace:
+            dashboards:
+              ups-dashboard:
+                mode: yaml
+                title: UPS
+                icon: mdi:battery-high
+                show_in_sidebar: true
+                filename: dashboards/ups.yaml
+          {% endraw %}
+
+    - name: Configure dashboards/ups.yaml
+      copy:
+        dest: /home/rex/home-assistant/config/dashboards/ups.yaml
+        content: |
+          {% raw %}
+          views:
+            - title: UPS
+              path: ups
+              icon: mdi:power-plug
+              cards:
+                - type: vertical-stack
+                  cards:
+                    - type: gauge
+                      name: Power
+                      entity: sensor.ups_current_power
+                      min: 0
+                      max: 375
+                      severity:
+                        green: 0
+                        yellow: 200
+                        red: 300
+                    - type: entities
+                      title: Status
+                      entities:
+                        - entity: sensor.ups_current_power
+                          name: Current Load
+                        - entity: sensor.ups_remaining_runtime
+                          name: Estimated Runtime
+                        - entity: sensor.ups_status
+                          name: UPS Status
+                        - entity: sensor.ups_battery_charge
+                          name: Battery Level
+                    - type: entities
+                      title: Power Totals
+                      entities:
+                        - entity: sensor.ups_power_daily
+                          name: Daily
+                        - entity: sensor.ups_power_weekly
+                          name: Weekly
+                        - entity: sensor.ups_power_monthly
+                          name: Monthly
+                        - entity: sensor.ups_power_yearly
+                          name: Yearly
+
+                - type: vertical-stack
+                  cards:
+                    - type: statistics-graph
+                      title: Daily Power
+                      days_to_show: 1
+                      period: hour
+                      chart_type: line
+                      entities:
+                        - sensor.ups_current_power
+                    - type: statistics-graph
+                      title: Weekly Power
+                      days_to_show: 7
+                      period: daily
+                      chart_type: line
+                      entities:
+                        - sensor.ups_current_power
+                    - type: statistics-graph
+                      title: Monthly Power
+                      days_to_show: 30
+                      period: daily
+                      chart_type: line
+                      entities:
+                        - sensor.ups_current_power
           {% endraw %}
 
   handlers:
